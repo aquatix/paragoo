@@ -20,5 +20,14 @@ loader = jinja2.FileSystemLoader(
          os.path.join(os.path.dirname(__file__),"templates")])
 environment = jinja2.Environment(loader=loader)
 
+for section in structure:
+    # loop over the sections
+    print section
+    section_data = structure[section]
+    print(section_data['name'])
+    for page in section_data:
+        # loop over its pages
+        print(page)
+
 template = Template('Hello {{ name }}!')
 template.render(name='John Doe')
