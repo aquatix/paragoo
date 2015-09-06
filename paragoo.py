@@ -1,4 +1,5 @@
 import os
+import sys
 from jinja2 import Template
 import jinja2
 import yaml
@@ -25,19 +26,24 @@ def check_config(config):
 
 #@cli.command('run_disruptions')
 @cli.command()
-@click.option('-c', '--config', prompt='Site config path')
-def generate_site(config):
+@click.option('-s', '--site', prompt='Site path')
+@click.option('-t', '--template', prompt='Template path')
+def generate_site(site, template):
     """
     Generate the website specified in the config
     """
 
     # Templates can live anywhere, define them in settings.py
-    f = open(os.path.join(setting.project_path, 'site.yaml'))
+    try:
+        f = open(os.path.join(site, 'site.yaml'))
 
-    print('Reading structure from ' + os.path.join(setting.project_path, 'site.yaml'))
+        print('Reading structure from ' + os.path.join(site, 'site.yaml'))
 
-    structure = yaml.safe_load(f)
-    f.close()
+        structure = yaml.safe_load(f)
+        f.close()
+    except IOError as e:
+        print e
+        sys.exit(1)
 
     print structure
 
