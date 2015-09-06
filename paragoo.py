@@ -16,8 +16,8 @@ def cli():
 
 
 @cli.command()
-@click.option('-c', '--config', prompt='Site config path')
-def check_config(config):
+@click.option('-s', '--site', prompt='Site path')
+def check_config(site):
     """
     Check site config (site.yaml) for correctness
     """
