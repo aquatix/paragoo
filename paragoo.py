@@ -4,7 +4,6 @@ from jinja2 import Template
 import jinja2
 import yaml
 import click
-import settings
 
 ## Main program
 @click.group()
@@ -28,12 +27,12 @@ def check_config(site):
 @cli.command()
 @click.option('-s', '--site', prompt='Site path')
 @click.option('-t', '--template', prompt='Template path')
-def generate_site(site, template):
+@click.option('-o', '--output_dir', prompt='Output path for generated content')
+def generate_site(site, template, output_dir):
     """
     Generate the website specified in the config
     """
 
-    # Templates can live anywhere, define them in settings.py
     try:
         f = open(os.path.join(site, 'site.yaml'))
 
@@ -47,8 +46,17 @@ def generate_site(site, template):
 
     print structure
 
-    # Templates can live anywhere, define them in settings.py
-    template_dir = settings.template_path
+    try:
+        # Try if output_dir is writable
+        # TODO: check existence of output_dir
+        # TODO: create output_dir
+        f = open(os.path.join(output_dir, 'temp'), 'w')
+    except IOError as e:
+        print e
+        sys.exit(1)
+
+    # Templates can live anywhere, define them on the command line
+    template_dir = template
     #loader = jinja2.FileSystemLoader(template_dir)
     loader = jinja2.FileSystemLoader(
             [template_dir,
@@ -58,17 +66,25 @@ def generate_site(site, template):
 
     template = environment.get_template('base.html')
 
+    site_info = {'title': 'example'}
     for section in structure:
         # loop over the sections
         print section
         section_data = structure[section]
         print(section_data['name'])
+        section_filename = os.path.join(output_dir, section_data['slug'])
+        print section_filename
         for page in section_data:
             # loop over its pages
             print(page)
-
-    #template = Template('Hello {{ name }}!')
-    template.render(name='John Doe')
+            output = template.render({'site': site_info, 'page': page})
+            filename = os.path.join(section_filename, page['slug'])
+            #pf = open(filename, 'w')
+            #pf.write(output)
+            #pf.close()
+            print filename
+            # TODO write file with output
+    print 'done'
 
 
 if __name__ == '__main__':
