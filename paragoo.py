@@ -5,6 +5,13 @@ import jinja2
 import yaml
 import click
 
+
+def ensure_dir(f):
+    d = os.path.dirname(f)
+    if not os.path.exists(d):
+        os.makedirs(d)
+
+
 ## Main program
 @click.group()
 def cli():
@@ -69,21 +76,20 @@ def generate_site(site, template, output_dir):
     site_info = {'title': 'example'}
     for section in structure['sections']:
         # loop over the sections
-        print section
         section_data = structure['sections'][section]
-        print(section_data['name'])
         section_filename = os.path.join(output_dir, section_data['slug'])
         print section_filename
         for page in section_data['pages']:
             # loop over its pages
-            print(page)
-            output = template.render({'site': site_info, 'page': page})
-            filename = os.path.join(section_filename, page['slug'])
-            #pf = open(filename, 'w')
-            #pf.write(output)
-            #pf.close()
+            page_data = structure['sections'][section]['pages'][page]
+            output = template.render({'site': site_info, 'page': page_data})
+            #filename = os.path.join(section_filename, page_data['slug'] + '.html')
+            filename = os.path.join(section_filename, page_data['slug'] + '/index.html')
             print filename
-            # TODO write file with output
+            ensure_dir(filename)
+            pf = open(filename, 'w')
+            pf.write(output)
+            pf.close()
     print 'done'
 
 
