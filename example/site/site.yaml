@@ -11,16 +11,15 @@ sections:
             page-1:
                 title: Page number 1
                 # filename is implicit: page-1.md and page-1.html will be tried
-    section 2:
+            nonexisting:
+                title: Should not be there
+    section_2:
         title: Section numero dos
-        slug: section_2
         pages:
             42-you-know:
                 title: 42 you know
-                file: 42.html
             info:
                 title: Info page
-                file: info_page.md
             pics:
                 title: Pictures
                 type: gallery
