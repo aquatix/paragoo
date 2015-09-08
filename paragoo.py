@@ -4,6 +4,7 @@ from jinja2 import Template
 import jinja2
 import yaml
 import click
+import markdown
 
 
 CONTENT_TYPES = {
@@ -20,7 +21,7 @@ def ensure_dir(f):
 
 
 def load_page_source(section_dir, page, page_data):
-    filename_source = os.path.join(section_dir, page)
+    filename = os.path.join(section_dir, page)
     try:
         content_type = page_data['type']
     except KeyError:
@@ -29,8 +30,17 @@ def load_page_source(section_dir, page, page_data):
         filename = page_data['file']
     except KeyError:
         print 'wtf'
-    filename_source += '.' + CONTENT_TYPES[content_type]
-    print filename_source
+    filename += '.' + CONTENT_TYPES[content_type]
+    print filename
+    data = None
+    try:
+        with open(filename) as pf:
+            data = pf.read()
+    except IOError:
+        print 'File not found: ' + filename
+    if data and content_type == 'markdown':
+        data = markdown.markdown(data, output_format='html5')
+    return data
 
 
 ## Main program
