@@ -67,14 +67,14 @@ def generate_site(site, template, output_dir):
     template = environment.get_template('base.html')
 
     site_info = {'title': 'example'}
-    for section in structure:
+    for section in structure['sections']:
         # loop over the sections
         print section
-        section_data = structure[section]
+        section_data = structure['sections'][section]
         print(section_data['name'])
         section_filename = os.path.join(output_dir, section_data['slug'])
         print section_filename
-        for page in section_data:
+        for page in section_data['pages']:
             # loop over its pages
             print(page)
             output = template.render({'site': site_info, 'page': page})

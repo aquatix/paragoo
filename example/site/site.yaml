@@ -1,19 +1,24 @@
 # site configuration
-section 1:
-    name: Section 1
-    slug: section_1
-    page-1:
-        name: Page number 1
-        slug: page-nr-1
-        # filename is implicit: page-nr-1.md and page-nr-1.html will be tried
-section 2:
-    name: Section numero dos
-    slug: section_2
-    page 42:
-        name: 42 you know
-        slug: 42-you-know
-        file: 42.html
-    info:
-        name: Info page
-        slug: info
-        file: info_page.md
+title: Example website
+author: Paragoo
+sections:
+    section 1:
+        name: Section 1
+        slug: section_1
+        pages:
+            page-1:
+                name: Page number 1
+                slug: page-nr-1
+                # filename is implicit: page-nr-1.md and page-nr-1.html will be tried
+    section 2:
+        name: Section numero dos
+        slug: section_2
+        pages:
+            page 42:
+                name: 42 you know
+                slug: 42-you-know
+                file: 42.html
+            info:
+                name: Info page
+                slug: info
+                file: info_page.md
