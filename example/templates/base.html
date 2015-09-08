@@ -1,7 +1,12 @@
 <html>
-<title>{{ site.title }}</title>
-
+<head>
+    <title>{{ page.title }} - {{ site.title }}</title>
+    <meta name="author" content="{{ author }}" />
+    <meta name="description" content="{{ description }}" />
+    <meta name="copyright" content="{{ site.copyright }}" />
+</head>
 <body>
-
+{{ htmlbody }}
+<footer>{{ footer }}</footer>
 </body>
 </html>

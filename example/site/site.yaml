@@ -1,24 +1,26 @@
 # site configuration
 title: Example website
 author: Paragoo
+description: Default description of this website
+copyright: Copyleft Paragoo Labs
+footer: Copyleft Paragoo Labs
 sections:
-    section 1:
-        name: Section 1
-        slug: section_1
+    section_1:
+        title: Section 1
         pages:
             page-1:
-                name: Page number 1
-                slug: page-nr-1
-                # filename is implicit: page-nr-1.md and page-nr-1.html will be tried
+                title: Page number 1
+                # filename is implicit: page-1.md and page-1.html will be tried
     section 2:
-        name: Section numero dos
+        title: Section numero dos
         slug: section_2
         pages:
-            page 42:
-                name: 42 you know
-                slug: 42-you-know
+            42-you-know:
+                title: 42 you know
                 file: 42.html
             info:
-                name: Info page
-                slug: info
+                title: Info page
                 file: info_page.md
+            pics:
+                title: Pictures
+                type: gallery

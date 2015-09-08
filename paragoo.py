@@ -6,10 +6,31 @@ import yaml
 import click
 
 
+CONTENT_TYPES = {
+        'markdown': 'md',
+        'html': 'html',
+        'gallery': 'gallery',
+        }
+
+
 def ensure_dir(f):
     d = os.path.dirname(f)
     if not os.path.exists(d):
         os.makedirs(d)
+
+
+def load_page_source(section_dir, page, page_data):
+    filename_source = os.path.join(section_dir, page)
+    try:
+        content_type = page_data['type']
+    except KeyError:
+        content_type = 'markdown'
+    try:
+        filename = page_data['file']
+    except KeyError:
+        print 'wtf'
+    filename_source += '.' + CONTENT_TYPES[content_type]
+    print filename_source
 
 
 ## Main program
@@ -74,22 +95,38 @@ def generate_site(site, template, output_dir, clean):
     template = environment.get_template('base.html')
 
     if clean:
-        print "should clean dir"
+        print 'Cleaning up output_dir ' + output_dir
         # TODO: actuall clean up output_dir (danger!)
     else:
-        print "no need for cleanup, overwrite existing, keeping others"
+        print 'Not cleaning up, overwrite existing, keeping others'
 
-    site_info = {'title': 'example'}
+    # Site-global texts
+    site_fields = ['title', 'author', 'description', 'copyright', 'footer']
+    site_data = {}
+    for field in site_fields:
+        site_data[field] = structure[field]
+
     for section in structure['sections']:
-        # loop over the sections
+        # Iterate over the sections
         section_data = structure['sections'][section]
-        section_filename = os.path.join(output_dir, section_data['slug'])
-        print section_filename
+        section_filename = os.path.join(output_dir, section)
+        source_section_filename = os.path.join(site, section)
+        #print section_filename
         for page in section_data['pages']:
-            # loop over its pages
+            # Loop over its pages
             page_data = structure['sections'][section]['pages'][page]
-            output = template.render({'site': site_info, 'page': page_data})
-            filename = os.path.join(section_filename, page_data['slug'] + '/index.html')
+            htmlbody = load_page_source(source_section_filename, page, page_data)
+            data = site_data.copy()
+            data['site'] = site_data
+            try:
+                data['author'] = page_data['author']
+            except KeyError:
+                data['author'] = site_data['author']
+            data['page'] = page_data
+            data['htmlbody'] = htmlbody
+            data['structure'] = structure
+            output = template.render(data)
+            filename = os.path.join(section_filename, page + '/index.html')
             print filename
             ensure_dir(filename)
             pf = open(filename, 'w')
