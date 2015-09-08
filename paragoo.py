@@ -35,11 +35,11 @@ def check_config(site):
 @click.option('-s', '--site', prompt='Site path')
 @click.option('-t', '--template', prompt='Template path')
 @click.option('-o', '--output_dir', prompt='Output path for generated content')
-def generate_site(site, template, output_dir):
+@click.option('--clean/--noclean', default=False)
+def generate_site(site, template, output_dir, clean):
     """
     Generate the website specified in the config
     """
-
     try:
         f = open(os.path.join(site, 'site.yaml'))
 
@@ -73,6 +73,12 @@ def generate_site(site, template, output_dir):
 
     template = environment.get_template('base.html')
 
+    if clean:
+        print "should clean dir"
+        # TODO: actuall clean up output_dir (danger!)
+    else:
+        print "no need for cleanup, overwrite existing, keeping others"
+
     site_info = {'title': 'example'}
     for section in structure['sections']:
         # loop over the sections
@@ -83,7 +89,6 @@ def generate_site(site, template, output_dir):
             # loop over its pages
             page_data = structure['sections'][section]['pages'][page]
             output = template.render({'site': site_info, 'page': page_data})
-            #filename = os.path.join(section_filename, page_data['slug'] + '.html')
             filename = os.path.join(section_filename, page_data['slug'] + '/index.html')
             print filename
             ensure_dir(filename)
