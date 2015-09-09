@@ -15,6 +15,19 @@ CONTENT_TYPES = {
 }
 
 
+def generate_navbar(structure):
+    navbar = []
+    for section in structure['sections']:
+        section_data = structure['sections'][section]
+        for page in section_data['pages']:
+            url = '/' + section + '/' + page
+            title = structure['sections'][section]['pages'][page]['title']
+            #navbar.append(structure['sections'][section]['pages'][page])
+            navbar.append((url, page, title))
+    print navbar
+    return navbar
+
+
 def ensure_dir(f):
     d = os.path.dirname(f)
     if not os.path.exists(d):
@@ -149,6 +162,9 @@ def generate_site(site, template, output_dir, clean):
     except KeyError:
         print 'Defaulting to searching sub directories for source files'
 
+    # Create navbar datastructure
+    navbar = generate_navbar(structure)
+
     for section in structure['sections']:
         # Iterate over the sections
         section_data = structure['sections'][section]
@@ -174,6 +190,8 @@ def generate_site(site, template, output_dir, clean):
                     data['author'] = site_data['author']
                 data['page'] = page_data
                 data['htmlbody'] = htmlbody
+                data['navbar'] = navbar
+                data['active_page'] = page
                 data['structure'] = structure
                 # Render the page
                 output = template.render(data)

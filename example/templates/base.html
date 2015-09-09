@@ -7,7 +7,15 @@
 </head>
 <body>
 {% block navbar %}
-<nav></nav>
+{% set active_page = active_page|default('index') -%}
+<nav>
+    <ul id="navigation">
+    {% for href, id, caption in navbar %}
+      <li{% if id == active_page %} class="active"{% endif
+      %}><a href="{{ href|e }}">{{ caption|e }}</a></li>
+    {% endfor %}
+    </ul>
+</nav>
 {% endblock %}
 {% block body %}
 {{ htmlbody }}
