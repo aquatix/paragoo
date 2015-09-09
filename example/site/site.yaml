@@ -4,6 +4,7 @@ author: Paragoo
 description: Default description of this website
 copyright: Copyleft Paragoo Labs
 footer: Copyleft Paragoo Labs
+subdirs: true
 sections:
     section_1:
         title: Section 1
