@@ -58,7 +58,7 @@ def load_page_source(source_uses_subdirs, section_dir, page, page_data):
     else:
         filename += '.' + CONTENT_TYPES[content_type]
         print ' r  ' + filename
-        data = get_file_contents(try_filename)
+        data = get_file_contents(filename)
     if data and content_type == 'markdown':
         data = markdown.markdown(data, output_format='html5')
     return data
@@ -160,6 +160,7 @@ def generate_site(site, template, output_dir, clean):
         if not 'pages' in section_data:
             print ' -  section ' + section + ' does not have pages'
         else:
+            first_page = True
             for page in section_data['pages']:
                 # Loop over its pages
                 page_data = structure['sections'][section]['pages'][page]
@@ -177,22 +178,34 @@ def generate_site(site, template, output_dir, clean):
                 # Render the page
                 output = template.render(data)
                 # Save to output_dir
-                filename = os.path.join(section_filename, page + '/index.html')
+                filename = os.path.join(section_filename, page, 'index.html')
                 print ' w  ' + filename
                 ensure_dir(filename)
                 pf = open(filename, 'w')
                 pf.write(output)
                 pf.close()
+                if first_page:
+                    # Also save an index file for the section (first page in section is section homepage)
+                    first_page = False
+                    filename = os.path.join(section_filename, 'index.html')
+                    print ' w  ' + filename
+                    ensure_dir(filename)
+                    pf = open(filename, 'w')
+                    pf.write(output)
+                    pf.close()
     static_dirs = ['images', 'styles', 'scripts']
     for dirname in static_dirs:
         print ' -  copying directory "' + dirname + '"'
         #src = os.path.join(template_dir, dirname)
         src = os.path.join(os.path.dirname(site), dirname)
         dst = os.path.join(output_dir, dirname)
-        try:
-            shutil.copytree(src, dst, symlinks=False, ignore=None)
-        except OSError:
-            print '[E] Directory already exists, skipping'
+        if not os.path.exists(src):
+            print '[E] Source directory not found, skipping'
+        else:
+            try:
+                shutil.copytree(src, dst, symlinks=False, ignore=None)
+            except OSError:
+                print '[E] Directory already exists, skipping'
     print ' -  done'
 
 
