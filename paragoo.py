@@ -5,6 +5,7 @@ import jinja2
 import yaml
 import click
 import markdown
+import shutil
 
 
 CONTENT_TYPES = {
@@ -52,11 +53,11 @@ def load_page_source(source_uses_subdirs, section_dir, page, page_data):
             try_filename = filename + '.' + ct
             data = get_file_contents(try_filename)
             if data:
-                print try_filename
+                print ' r  ' + try_filename
                 break
     else:
         filename += '.' + CONTENT_TYPES[content_type]
-        print filename
+        print ' r  ' + filename
         data = get_file_contents(try_filename)
     if data and content_type == 'markdown':
         data = markdown.markdown(data, output_format='html5')
@@ -128,7 +129,7 @@ def generate_site(site, template, output_dir, clean):
         print 'Cleaning up output_dir ' + output_dir
         # TODO: actuall clean up output_dir (danger!)
     else:
-        print 'Not cleaning up, overwrite existing, keeping others'
+        print '[!] Not cleaning up, overwrite existing, keeping others'
 
     # Site-global texts
     site_fields = ['title', 'author', 'description', 'copyright', 'footer']
@@ -151,12 +152,13 @@ def generate_site(site, template, output_dir, clean):
             source_section_filename = os.path.join(site, 'pages', section)
         #print section_filename
         if not 'pages' in section_data:
-            print '- section ' + section + ' does not have pages'
+            print ' -  section ' + section + ' does not have pages'
         else:
             for page in section_data['pages']:
                 # Loop over its pages
                 page_data = structure['sections'][section]['pages'][page]
                 htmlbody = load_page_source(source_uses_subdirs, source_section_filename, page, page_data)
+                # Template variables
                 data = site_data.copy()
                 data['site'] = site_data
                 try:
@@ -166,14 +168,26 @@ def generate_site(site, template, output_dir, clean):
                 data['page'] = page_data
                 data['htmlbody'] = htmlbody
                 data['structure'] = structure
+                # Render the page
                 output = template.render(data)
+                # Save to output_dir
                 filename = os.path.join(section_filename, page + '/index.html')
-                print filename
+                print ' -  writing to ' + filename
                 ensure_dir(filename)
                 pf = open(filename, 'w')
                 pf.write(output)
                 pf.close()
-    print 'done'
+    static_dirs = ['images', 'styles', 'scripts']
+    for dirname in static_dirs:
+        print ' -  copying directory "' + dirname + '"'
+        #src = os.path.join(template_dir, dirname)
+        src = os.path.join(os.path.dirname(site), dirname)
+        dst = os.path.join(output_dir, dirname)
+        try:
+            shutil.copytree(src, dst, symlinks=False, ignore=None)
+        except OSError:
+            print '[E] Directory already exists, skipping'
+    print ' -  done'
 
 
 if __name__ == '__main__':
