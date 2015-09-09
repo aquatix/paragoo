@@ -181,18 +181,15 @@ def generate_site(site, template, output_dir, clean):
                 filename = os.path.join(section_filename, page, 'index.html')
                 print ' w  ' + filename
                 ensure_dir(filename)
-                pf = open(filename, 'w')
-                pf.write(output)
-                pf.close()
+                with open(filename, 'w') as pf:
+                    pf.write(output)
                 if first_page:
                     # Also save an index file for the section (first page in section is section homepage)
                     first_page = False
                     filename = os.path.join(section_filename, 'index.html')
                     print ' w  ' + filename
-                    ensure_dir(filename)
-                    pf = open(filename, 'w')
-                    pf.write(output)
-                    pf.close()
+                    with open(filename, 'w') as pf:
+                        pf.write(output)
     static_dirs = ['images', 'styles', 'scripts']
     for dirname in static_dirs:
         print ' -  copying directory "' + dirname + '"'
