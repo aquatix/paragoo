@@ -1,12 +1,17 @@
 <html>
 <head>
-    <title>{{ page.title }} - {{ site.title }}</title>
+    <title>{% block title %}{{ page.title }}{% endblock %} - {{ site.title }}</title>
     <meta name="author" content="{{ author }}" />
     <meta name="description" content="{{ description }}" />
     <meta name="copyright" content="{{ site.copyright }}" />
 </head>
 <body>
+{% block navbar %}
+<nav></nav>
+{% endblock %}
+{% block body %}
 {{ htmlbody }}
 <footer>{{ footer }}</footer>
+{% endblock %}
 </body>
 </html>
