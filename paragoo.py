@@ -1,18 +1,18 @@
 import os
 import sys
-from jinja2 import Template
 import jinja2
 import yaml
 import click
 import markdown
 import shutil
+import datetime
 
 
 CONTENT_TYPES = {
-        'markdown': 'md',
-        'html': 'html',
-        'gallery': 'gallery',
-        }
+    'markdown': 'md',
+    'html': 'html',
+    'gallery': 'gallery',
+}
 
 
 def ensure_dir(f):
@@ -95,7 +95,7 @@ def generate_site(site, template, output_dir, clean):
     try:
         f = open(os.path.join(site, 'site.yaml'))
 
-        print('Reading structure from ' + os.path.join(site, 'site.yaml'))
+        print(' r  Reading structure from ' + os.path.join(site, 'site.yaml'))
 
         structure = yaml.safe_load(f)
         f.close()
@@ -126,8 +126,14 @@ def generate_site(site, template, output_dir, clean):
     template = environment.get_template('base.html')
 
     if clean:
-        print 'Cleaning up output_dir ' + output_dir
-        # TODO: actuall clean up output_dir (danger!)
+        print ' d  Cleaning up output_dir ' + output_dir
+        if os.path.exists(output_dir):
+            current_time = datetime.datetime.now()
+            dt_format = '%Y-%m-%dT%H:%M:%S%z'
+            timestamp = current_time.strftime(dt_format)
+            #dst = os.path.join(os.path.dirname(output_dir), timestamp)
+            dst = output_dir + '_' + timestamp
+            shutil.move(output_dir, dst)
     else:
         print '[!] Not cleaning up, overwrite existing, keeping others'
 
@@ -172,7 +178,7 @@ def generate_site(site, template, output_dir, clean):
                 output = template.render(data)
                 # Save to output_dir
                 filename = os.path.join(section_filename, page + '/index.html')
-                print ' -  writing to ' + filename
+                print ' w  ' + filename
                 ensure_dir(filename)
                 pf = open(filename, 'w')
                 pf.write(output)
