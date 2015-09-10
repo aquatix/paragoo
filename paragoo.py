@@ -21,6 +21,9 @@ def generate_navbar(structure):
         section_data = structure['sections'][section]
         if not 'pages' in section_data:
             print ' -  section ' + section + ' does not have pages'
+            url = '/' + section + '/'
+            title = section_data['title']
+            navbar.append((url, section, title))
         else:
             for page in section_data['pages']:
                 url = '/' + section + '/' + page
@@ -49,10 +52,14 @@ def get_file_contents(filename):
 
 
 def load_page_source(source_uses_subdirs, section_dir, page, page_data):
-    if source_uses_subdirs:
-        filename = os.path.join(section_dir, page)
+    if page:
+        if source_uses_subdirs:
+            filename = os.path.join(section_dir, page)
+        else:
+            filename = section_dir + '_' + page
     else:
-        filename = section_dir + '_' + page
+        # Section without pages, only one source file
+        filename = section_dir
 
     try:
         content_type = page_data['type']
@@ -171,8 +178,33 @@ def generate_site(site, template, output_dir, clean):
         #print section_filename
         if not 'pages' in section_data:
             print ' -  section ' + section + ' does not have pages'
+            htmlbody = load_page_source(source_uses_subdirs, source_section_filename, None, {})
+            #data = load_page_source(source_uses_subdirs, os.path.dirname(source_section_filename), section, {})
+            if htmlbody:
+                # Template variables
+                data = site_data.copy()
+                data['site'] = site_data
+                try:
+                    data['author'] = page_data['author']
+                except KeyError:
+                    data['author'] = site_data['author']
+                data['page'] = section_data
+                data['htmlbody'] = htmlbody
+                data['navbar'] = navbar
+                data['active_page'] = section
+                data['structure'] = structure
+                # Render the page
+                output = template.render(data)
+                filename = os.path.join(section_filename, 'index.html')
+                ensure_dir(filename)
+                print ' w  ' + filename
+                with open(filename, 'w') as pf:
+                    pf.write(output)
+            else:
+                print '[E] hm, also no section page found'
         else:
-            first_page = True
+            very_first_page = True # Homepage of website, root
+            first_page = True # Homepage of section
             for page in section_data['pages']:
                 # Loop over its pages
                 page_data = structure['sections'][section]['pages'][page]
@@ -201,6 +233,13 @@ def generate_site(site, template, output_dir, clean):
                     # Also save an index file for the section (first page in section is section homepage)
                     first_page = False
                     filename = os.path.join(section_filename, 'index.html')
+                    print ' w  ' + filename
+                    with open(filename, 'w') as pf:
+                        pf.write(output)
+                if very_first_page:
+                    # Also save an index file for the homepage, root of site
+                    very_first_page = False
+                    filename = os.path.join(output_dir, 'index.html')
                     print ' w  ' + filename
                     with open(filename, 'w') as pf:
                         pf.write(output)
