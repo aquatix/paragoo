@@ -23,13 +23,15 @@ def generate_navbar(structure):
             print ' -  section ' + section + ' does not have pages'
             url = '/' + section + '/'
             title = section_data['title']
-            navbar.append((url, section, title))
+            if title:
+                navbar.append((url, section, title))
         else:
             for page in section_data['pages']:
                 url = '/' + section + '/' + page
                 title = structure['sections'][section]['pages'][page]['title']
                 #navbar.append(structure['sections'][section]['pages'][page])
-                navbar.append((url, page, title))
+                if title:
+                    navbar.append((url, page, title))
     print navbar
     return navbar
 
