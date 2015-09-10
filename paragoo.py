@@ -19,11 +19,14 @@ def generate_navbar(structure):
     navbar = []
     for section in structure['sections']:
         section_data = structure['sections'][section]
-        for page in section_data['pages']:
-            url = '/' + section + '/' + page
-            title = structure['sections'][section]['pages'][page]['title']
-            #navbar.append(structure['sections'][section]['pages'][page])
-            navbar.append((url, page, title))
+        if not 'pages' in section_data:
+            print ' -  section ' + section + ' does not have pages'
+        else:
+            for page in section_data['pages']:
+                url = '/' + section + '/' + page
+                title = structure['sections'][section]['pages'][page]['title']
+                #navbar.append(structure['sections'][section]['pages'][page])
+                navbar.append((url, page, title))
     print navbar
     return navbar
 
@@ -118,15 +121,6 @@ def generate_site(site, template, output_dir, clean):
 
     print structure
 
-    try:
-        # Try if output_dir is writable
-        # TODO: check existence of output_dir
-        # TODO: create output_dir
-        f = open(os.path.join(output_dir, 'temp'), 'w')
-    except IOError as e:
-        print e
-        sys.exit(1)
-
     # Templates can live anywhere, define them on the command line
     template_dir = template
     #loader = jinja2.FileSystemLoader(template_dir)
@@ -149,6 +143,8 @@ def generate_site(site, template, output_dir, clean):
             shutil.move(output_dir, dst)
     else:
         print '[!] Not cleaning up, overwrite existing, keeping others'
+
+    ensure_dir(output_dir)
 
     # Site-global texts
     site_fields = ['title', 'author', 'description', 'copyright', 'footer']
