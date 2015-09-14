@@ -44,7 +44,7 @@ def generate_navbar(structure):
                     navbar_section.append((url, page, title))
         if section_title:
             navbar.append((section_url, section, section_title, navbar_section))
-    print navbar
+    #print navbar
     return navbar
 
 
@@ -90,11 +90,11 @@ def load_page_source(source_uses_subdirs, section_dir, page, page_data):
             try_filename = filename + '.' + ct
             data = get_file_contents(try_filename)
             if data:
-                print ' r  ' + try_filename
+                #print ' r  ' + try_filename
                 break
     else:
         filename += '.' + CONTENT_TYPES[content_type]
-        print ' r  ' + filename
+        #print ' r  ' + filename
         data = get_file_contents(filename)
     if data and content_type == 'markdown':
         data = markdown.markdown(data, output_format='html5')
@@ -140,7 +140,7 @@ def generate_site(site, template, output_dir, clean):
         print e
         sys.exit(1)
 
-    print structure
+    #print structure
 
     # Templates can live anywhere, define them on the command line
     template_dir = template
@@ -212,7 +212,7 @@ def generate_site(site, template, output_dir, clean):
                 output = template.render(data)
                 filename = os.path.join(section_filename, 'index.html')
                 ensure_dir(filename)
-                print ' w  ' + filename
+                #print ' w  ' + filename
                 with open(filename, 'w') as pf:
                     pf.write(output)
             else:
@@ -241,7 +241,7 @@ def generate_site(site, template, output_dir, clean):
                 output = template.render(data)
                 # Save to output_dir
                 filename = os.path.join(section_filename, page, 'index.html')
-                print ' w  ' + filename
+                #print ' w  ' + filename
                 ensure_dir(filename)
                 with open(filename, 'w') as pf:
                     pf.write(output)
@@ -249,14 +249,14 @@ def generate_site(site, template, output_dir, clean):
                     # Also save an index file for the section (first page in section is section homepage)
                     first_page = False
                     filename = os.path.join(section_filename, 'index.html')
-                    print ' w  ' + filename
+                    #print ' w  ' + filename
                     with open(filename, 'w') as pf:
                         pf.write(output)
                 if very_first_page:
                     # Also save an index file for the homepage, root of site
                     very_first_page = False
                     filename = os.path.join(output_dir, 'index.html')
-                    print ' w  ' + filename
+                    #print ' w  ' + filename
                     with open(filename, 'w') as pf:
                         pf.write(output)
     static_dirs = ['images', 'styles', 'scripts']
