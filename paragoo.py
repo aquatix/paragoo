@@ -18,20 +18,19 @@ CONTENT_TYPES = {
 def generate_navbar(structure):
     navbar = []
     for section in structure['sections']:
+        navbar_section = []
         section_data = structure['sections'][section]
-        if not 'pages' in section_data:
-            print ' -  section ' + section + ' does not have pages'
-            url = '/' + section + '/'
-            title = section_data['title']
-            if title:
-                navbar.append((url, section, title))
-        else:
+        section_url = '/' + section + '/'
+        section_title = section_data['title']
+        if 'pages' in section_data:
             for page in section_data['pages']:
                 url = '/' + section + '/' + page
                 title = structure['sections'][section]['pages'][page]['title']
                 #navbar.append(structure['sections'][section]['pages'][page])
                 if title:
-                    navbar.append((url, page, title))
+                    navbar_section.append((url, page, title))
+        if section_title:
+            navbar.append((section_url, section, section_title, navbar_section))
     print navbar
     return navbar
 
