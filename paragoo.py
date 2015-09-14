@@ -137,7 +137,7 @@ def generate_site(site, template, output_dir, clean):
             [template_dir,
              os.path.join(os.path.dirname(__file__), 'templates/includes'),
              os.path.join(os.path.dirname(__file__), 'templates')])
-    environment = jinja2.Environment(loader=loader)
+    environment = jinja2.Environment(loader=loader, trim_blocks=True, lstrip_blocks=True)
 
     template = environment.get_template('base.html')
 
@@ -193,6 +193,7 @@ def generate_site(site, template, output_dir, clean):
                 data['page'] = section_data
                 data['htmlbody'] = htmlbody
                 data['navbar'] = navbar
+                data['active_section'] = section
                 data['active_page'] = section
                 data['structure'] = structure
                 # Render the page
@@ -221,6 +222,7 @@ def generate_site(site, template, output_dir, clean):
                 data['page'] = page_data
                 data['htmlbody'] = htmlbody
                 data['navbar'] = navbar
+                data['active_section'] = section
                 data['active_page'] = page
                 data['structure'] = structure
                 # Render the page
