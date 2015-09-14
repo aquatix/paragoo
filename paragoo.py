@@ -182,6 +182,7 @@ def generate_site(site, template, output_dir, clean):
     # Create navbar datastructure
     navbar = generate_navbar(structure)
 
+    very_first_page = True # Homepage of website, root
     for section in structure['sections']:
         # Iterate over the sections
         section_data = structure['sections'][section]
@@ -190,6 +191,7 @@ def generate_site(site, template, output_dir, clean):
         if not source_uses_subdirs:
             source_section_filename = os.path.join(site, 'pages', section)
         #print section_filename
+        first_page = True # Homepage of section
         if not 'pages' in section_data:
             print ' -  section ' + section + ' does not have pages'
             htmlbody = load_page_source(source_uses_subdirs, source_section_filename, None, {})
@@ -215,11 +217,21 @@ def generate_site(site, template, output_dir, clean):
                 #print ' w  ' + filename
                 with open(filename, 'w') as pf:
                     pf.write(output)
+                if first_page:
+                    # Also save an index file for the section (first page in section is section homepage)
+                    first_page = False
+                    filename = os.path.join(section_filename, 'index.html')
+                    with open(filename, 'w') as pf:
+                        pf.write(output)
+                if very_first_page:
+                    # Also save an index file for the homepage, root of site
+                    very_first_page = False
+                    filename = os.path.join(output_dir, 'index.html')
+                    with open(filename, 'w') as pf:
+                        pf.write(output)
             else:
                 print '[E] hm, also no section page found'
         else:
-            very_first_page = True # Homepage of website, root
-            first_page = True # Homepage of section
             for page in section_data['pages']:
                 # Loop over its pages
                 page_data = structure['sections'][section]['pages'][page]
@@ -259,6 +271,19 @@ def generate_site(site, template, output_dir, clean):
                     #print ' w  ' + filename
                     with open(filename, 'w') as pf:
                         pf.write(output)
+    # Generate static pages to be used with the httpd's error directives
+    error_pages = {'404': 'Not found', '403': 'Forbidden'}
+    for page in error_pages:
+        data['page'] = {'title': page + ' ' + error_pages[page]}
+        try:
+            data['htmlbody'] = structure['errorpage']
+        except KeyError:
+            data['htmlbody'] = 'An error occurred. Use the navigation to find something else on the website or use history back to go back to where you came from.'
+        output = template.render(data)
+        filename = os.path.join(output_dir, page + '.html')
+        with open(filename, 'w') as pf:
+            pf.write(output)
+    # Copy the directories with static assets
     static_dirs = ['images', 'styles', 'scripts']
     for dirname in static_dirs:
         print ' -  copying directory "' + dirname + '"'
