@@ -21,6 +21,40 @@ def ordered_load(stream, Loader=yaml.Loader, object_pairs_hook=OrderedDict):
     return yaml.load(stream, OrderedLoader)
 
 
+def render_include(key, params):
+    """
+    Render paragoo include. Typically looks like:
+    @@@key=param@@@
+    @@@key=param1:param2:param3@@@
+    """
+    return
+
+
+def paragoo_includes(body, token='@@@'):
+    """
+    Filter that looks for blocks surrounded by `token` and include that content type in
+    the rendered html
+    """
+    result = ''
+    if body:
+        body_parts = body.split(token)
+        print body_parts
+        is_content = True
+        for part in body_parts:
+            if is_content:
+                result += part
+                is_content = False
+            else:
+                include_parts = part.split('=')
+                include_params = include_parts[1].split(':')
+                print include_parts
+                print include_params
+                result += render_include(include_parts[0], include_params)
+                is_content = True
+        sys.exit(0)
+    return result
+
+
 CONTENT_TYPES = {
     'markdown': 'md',
     'html': 'html',
@@ -129,6 +163,12 @@ def generate_site(site, template, output_dir, clean):
     """
     Generate the website specified in the config
     """
+    # Change default encoding to UTF-8
+    # We need to reload sys module first, because setdefaultencoding is available
+    # only at startup time
+    reload(sys)
+    sys.setdefaultencoding('utf-8')
+
     try:
         f = open(os.path.join(site, 'site.yaml'))
 
@@ -150,6 +190,8 @@ def generate_site(site, template, output_dir, clean):
              os.path.join(os.path.dirname(__file__), 'templates/includes'),
              os.path.join(os.path.dirname(__file__), 'templates')])
     environment = jinja2.Environment(loader=loader, trim_blocks=True, lstrip_blocks=True)
+
+    environment.filters['paragoo_includes'] = paragoo_includes
 
     template = environment.get_template('base.html')
 
