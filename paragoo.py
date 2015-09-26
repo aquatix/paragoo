@@ -27,7 +27,7 @@ def render_include(key, params):
     @@@key=param@@@
     @@@key=param1:param2:param3@@@
     """
-    return
+    return ''
 
 
 def paragoo_includes(body, token='@@@'):
@@ -191,7 +191,7 @@ def generate_site(site, template, output_dir, clean):
              os.path.join(os.path.dirname(__file__), 'templates')])
     environment = jinja2.Environment(loader=loader, trim_blocks=True, lstrip_blocks=True)
 
-    environment.filters['paragoo_includes'] = paragoo_includes
+    #environment.filters['paragoo_includes'] = paragoo_includes
 
     template = environment.get_template('base.html')
 
@@ -247,7 +247,7 @@ def generate_site(site, template, output_dir, clean):
                 except KeyError:
                     data['author'] = site_data['author']
                 data['page'] = section_data
-                data['htmlbody'] = htmlbody
+                data['htmlbody'] = paragoo_includes(htmlbody)
                 data['navbar'] = navbar
                 data['active_section'] = section
                 data['active_page'] = section
@@ -286,7 +286,7 @@ def generate_site(site, template, output_dir, clean):
                 except KeyError:
                     data['author'] = site_data['author']
                 data['page'] = page_data
-                data['htmlbody'] = htmlbody
+                data['htmlbody'] = paragoo_includes(htmlbody)
                 data['navbar'] = navbar
                 data['active_section'] = section
                 data['active_page'] = page
@@ -318,7 +318,7 @@ def generate_site(site, template, output_dir, clean):
     for page in error_pages:
         data['page'] = {'title': page + ' ' + error_pages[page]}
         try:
-            data['htmlbody'] = structure['errorpage']
+            data['htmlbody'] = paragoo_includes(structure['errorpage'])
         except KeyError:
             data['htmlbody'] = 'An error occurred. Use the navigation to find something else on the website or use history back to go back to where you came from.'
         output = template.render(data)
