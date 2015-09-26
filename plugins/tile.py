@@ -13,7 +13,14 @@ def render(site_path, params):
     Look up the tile file from site import import config in site_path
     Format of params: <key>
     """
-    if os.path.isfile(site_path, 'tiles', params[0] + '.desc'):
-        return 'found'
+    filename = ''
+    print os.path.join(site_path, 'tiles', params[0] + '.md')
+    if os.path.isfile(os.path.join(site_path, 'tiles', params[0] + '.md')):
+        filename = os.path.join(site_path, 'tiles', params[0] + '.md')
+    elif os.path.isfile(os.path.join(site_path, 'tiles', params[0] + '.html')):
+        filename = os.path.join(site_path, 'tiles', params[0] + '.html')
     else:
-        raise NewsNotFoundException(params[0])
+        raise TileNotFoundException(params[0])
+    with open(filename, 'r') as f:
+        content = f.read()
+    return content
