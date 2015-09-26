@@ -50,7 +50,7 @@ def paragoo_includes(site, body, token='@@@'):
     result = ''
     if body:
         body_parts = body.split(token)
-        print body_parts
+        #print body_parts
         is_content = True
         for part in body_parts:
             if is_content:
@@ -66,7 +66,6 @@ def paragoo_includes(site, body, token='@@@'):
                 else:
                     print '[E] Plugin not found for include with key "' + include_parts[0] + '"'
                 is_content = True
-        sys.exit(0)
     return result
 
 
@@ -262,6 +261,8 @@ def generate_site(site, template, output_dir, clean):
                 except KeyError:
                     data['author'] = site_data['author']
                 data['page'] = section_data
+                if 'description' in section_data:
+                    data['description'] = section_data['description']
                 data['htmlbody'] = paragoo_includes(site, htmlbody)
                 data['navbar'] = navbar
                 data['active_section'] = section
@@ -341,7 +342,7 @@ def generate_site(site, template, output_dir, clean):
         with open(filename, 'w') as pf:
             pf.write(output)
     # Copy the directories with static assets
-    static_dirs = ['images', 'styles', 'scripts']
+    static_dirs = ['images', 'styles', 'scripts', 'static']
     for dirname in static_dirs:
         print ' -  copying directory "' + dirname + '"'
         #src = os.path.join(template_dir, dirname)
