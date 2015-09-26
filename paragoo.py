@@ -21,16 +21,28 @@ def ordered_load(stream, Loader=yaml.Loader, object_pairs_hook=OrderedDict):
     return yaml.load(stream, OrderedLoader)
 
 
-def render_include(key, params):
+def include_type_exists(key):
+    """
+    Check whether the include type (plugin) is valid/exists.
+    Needs a file of the format plugins/<key>.py
+    """
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    return os.path.isfile(os.path.join(script_dir, 'plugins', key + '.py'))
+
+
+def render_include(site, key, params):
     """
     Render paragoo include. Typically looks like:
     @@@key=param@@@
     @@@key=param1:param2:param3@@@
     """
-    return ''
+    # Load the relevant plugin
+    plugin = __import__('plugins.' + key, globals(), locals(), [key], -1)
+    print plugin
+    return plugin.render(site, params)
 
 
-def paragoo_includes(body, token='@@@'):
+def paragoo_includes(site, body, token='@@@'):
     """
     Filter that looks for blocks surrounded by `token` and include that content type in
     the rendered html
@@ -49,7 +61,10 @@ def paragoo_includes(body, token='@@@'):
                 include_params = include_parts[1].split(':')
                 print include_parts
                 print include_params
-                result += render_include(include_parts[0], include_params)
+                if include_type_exists(include_parts[0]):
+                    result += render_include(site, include_parts[0], include_params)
+                else:
+                    print '[E] Plugin not found for include with key "' + include_parts[0] + '"'
                 is_content = True
         sys.exit(0)
     return result
@@ -247,7 +262,7 @@ def generate_site(site, template, output_dir, clean):
                 except KeyError:
                     data['author'] = site_data['author']
                 data['page'] = section_data
-                data['htmlbody'] = paragoo_includes(htmlbody)
+                data['htmlbody'] = paragoo_includes(site, htmlbody)
                 data['navbar'] = navbar
                 data['active_section'] = section
                 data['active_page'] = section
@@ -286,7 +301,7 @@ def generate_site(site, template, output_dir, clean):
                 except KeyError:
                     data['author'] = site_data['author']
                 data['page'] = page_data
-                data['htmlbody'] = paragoo_includes(htmlbody)
+                data['htmlbody'] = paragoo_includes(site, htmlbody)
                 data['navbar'] = navbar
                 data['active_section'] = section
                 data['active_page'] = page
@@ -318,7 +333,7 @@ def generate_site(site, template, output_dir, clean):
     for page in error_pages:
         data['page'] = {'title': page + ' ' + error_pages[page]}
         try:
-            data['htmlbody'] = paragoo_includes(structure['errorpage'])
+            data['htmlbody'] = paragoo_includes(site, structure['errorpage'])
         except KeyError:
             data['htmlbody'] = 'An error occurred. Use the navigation to find something else on the website or use history back to go back to where you came from.'
         output = template.render(data)
