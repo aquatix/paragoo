@@ -10,13 +10,7 @@ class AppNotFoundException(Exception):
     pass
 
 
-def render(site_path, params):
-    """
-    Look up the Android app details from its Play Store listing
-    Format of params: <app_key>
-    app_key looks like com.linkbubble.license.playstore
-    """
-    app_key = params[0]
+def get_app_details(app_key):
     url_full = 'https://play.google.com/store/apps/details?id=' + app_key
     url = 'https://play.google.com/store/apps/details'
     url_params = {'id': app_key }
@@ -25,5 +19,16 @@ def render(site_path, params):
         raise AppNotFoundException(params[0])
     else:
         soup = BeautifulSoup(result.text, 'html.parser')
-        # TODO: render a card(?) with the site's androidapp.html template
-        return '<a href="' + url_full + '">' + soup.title.text.replace(' - Android-apps op Google Play', '') + '</a>'
+        return {'title': soup.title.text.replace(' - Android-apps op Google Play', ''), 'url': url_full}
+
+
+def render(site_path, params):
+    """
+    Look up the Android app details from its Play Store listing
+    Format of params: <app_key>:optional description
+    app_key looks like com.linkbubble.license.playstore
+    """
+    app_key = params[0]
+    details = get_app_details(app_key)
+    # TODO: render a card(?) with the site's androidapp.html template
+    return '<a href="' + details['url'] + '">' + details['title'] + '</a>'
