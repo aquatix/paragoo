@@ -38,7 +38,6 @@ def render_include(site, key, params):
     """
     # Load the relevant plugin
     plugin = __import__('plugins.' + key, globals(), locals(), [key], -1)
-    print plugin
     return plugin.render(site, params)
 
 
@@ -60,7 +59,6 @@ def paragoo_includes(site, body, token='@@@'):
                 include_parts = part.split('=')
                 include_params = include_parts[1].split(':')
                 print include_parts
-                print include_params
                 if include_type_exists(include_parts[0]):
                     result += render_include(site, include_parts[0], include_params)
                 else:
