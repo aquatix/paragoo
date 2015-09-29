@@ -49,7 +49,6 @@ def paragoo_includes(site, body, token='@@@'):
     result = ''
     if body:
         body_parts = body.split(token)
-        #print body_parts
         is_content = True
         for part in body_parts:
             if is_content:
@@ -58,11 +57,11 @@ def paragoo_includes(site, body, token='@@@'):
             else:
                 include_parts = part.split('=')
                 include_params = include_parts[1].split(':')
-                print include_parts
+                print '  ' + str(include_parts)
                 if include_type_exists(include_parts[0]):
                     result += render_include(site, include_parts[0], include_params)
                 else:
-                    print '[E] Plugin not found for include with key "' + include_parts[0] + '"'
+                    print 'E Plugin not found for include with key "' + include_parts[0] + '"'
                 is_content = True
     return result
 
@@ -90,7 +89,6 @@ def generate_navbar(structure):
                     navbar_section.append((url, page, title))
         if section_title:
             navbar.append((section_url, section, section_title, navbar_section))
-    #print navbar
     return navbar
 
 
@@ -136,11 +134,9 @@ def load_page_source(source_uses_subdirs, section_dir, page, page_data):
             try_filename = filename + '.' + ct
             data = get_file_contents(try_filename)
             if data:
-                #print ' r  ' + try_filename
                 break
     else:
         filename += '.' + CONTENT_TYPES[content_type]
-        #print ' r  ' + filename
         data = get_file_contents(filename)
     if data and content_type == 'markdown':
         data = markdown.markdown(data, output_format='html5')
@@ -181,18 +177,17 @@ def generate_site(site, template, output_dir, clean):
     reload(sys)
     sys.setdefaultencoding('utf-8')
 
+    print '> start'
     try:
         f = open(os.path.join(site, 'site.yaml'))
 
-        print(' r  Reading structure from ' + os.path.join(site, 'site.yaml'))
+        print('r Reading structure from ' + os.path.join(site, 'site.yaml'))
 
         structure = ordered_load(f, yaml.SafeLoader)
         f.close()
     except IOError as e:
         print e
         sys.exit(1)
-
-    #print structure
 
     # Templates can live anywhere, define them on the command line
     template_dir = template
@@ -208,7 +203,7 @@ def generate_site(site, template, output_dir, clean):
     template = environment.get_template('base.html')
 
     if clean:
-        print ' d  Cleaning up output_dir ' + output_dir
+        print 'd Cleaning up output_dir ' + output_dir
         if os.path.exists(output_dir):
             current_time = datetime.datetime.now()
             dt_format = '%Y-%m-%dT%H:%M:%S%z'
@@ -217,7 +212,7 @@ def generate_site(site, template, output_dir, clean):
             dst = output_dir + '_' + timestamp
             shutil.move(output_dir, dst)
     else:
-        print '[!] Not cleaning up, overwrite existing, keeping others'
+        print '! Not cleaning up, overwrite existing, keeping others'
 
     ensure_dir(output_dir)
 
@@ -231,7 +226,7 @@ def generate_site(site, template, output_dir, clean):
     try:
         source_uses_subdirs = structure['subdirs']
     except KeyError:
-        print 'Defaulting to searching sub directories for source files'
+        print 'I Defaulting to searching sub directories for source files'
 
     # Create navbar datastructure
     navbar = generate_navbar(structure)
@@ -244,10 +239,9 @@ def generate_site(site, template, output_dir, clean):
         source_section_filename = os.path.join(site, section)
         if not source_uses_subdirs:
             source_section_filename = os.path.join(site, 'pages', section)
-        #print section_filename
         first_page = True # Homepage of section
         if not 'pages' in section_data:
-            print ' -  section ' + section + ' does not have pages'
+            print '- section ' + section + ' does not have pages'
             htmlbody = load_page_source(source_uses_subdirs, source_section_filename, None, {})
             #data = load_page_source(source_uses_subdirs, os.path.dirname(source_section_filename), section, {})
             if htmlbody:
@@ -270,7 +264,6 @@ def generate_site(site, template, output_dir, clean):
                 output = template.render(data)
                 filename = os.path.join(section_filename, 'index.html')
                 ensure_dir(filename)
-                #print ' w  ' + filename
                 with open(filename, 'w') as pf:
                     pf.write(output)
                 if first_page:
@@ -286,7 +279,7 @@ def generate_site(site, template, output_dir, clean):
                     with open(filename, 'w') as pf:
                         pf.write(output)
             else:
-                print '[E] hm, also no section page found'
+                print 'E hm, also no section page found'
         else:
             for page in section_data['pages']:
                 # Loop over its pages
@@ -309,7 +302,6 @@ def generate_site(site, template, output_dir, clean):
                 output = template.render(data)
                 # Save to output_dir
                 filename = os.path.join(section_filename, page, 'index.html')
-                #print ' w  ' + filename
                 ensure_dir(filename)
                 with open(filename, 'w') as pf:
                     pf.write(output)
@@ -317,14 +309,12 @@ def generate_site(site, template, output_dir, clean):
                     # Also save an index file for the section (first page in section is section homepage)
                     first_page = False
                     filename = os.path.join(section_filename, 'index.html')
-                    #print ' w  ' + filename
                     with open(filename, 'w') as pf:
                         pf.write(output)
                 if very_first_page:
                     # Also save an index file for the homepage, root of site
                     very_first_page = False
                     filename = os.path.join(output_dir, 'index.html')
-                    #print ' w  ' + filename
                     with open(filename, 'w') as pf:
                         pf.write(output)
     # Generate static pages to be used with the httpd's error directives
@@ -342,18 +332,18 @@ def generate_site(site, template, output_dir, clean):
     # Copy the directories with static assets
     static_dirs = ['images', 'styles', 'scripts', 'static']
     for dirname in static_dirs:
-        print ' -  copying directory "' + dirname + '"'
+        print '- copying directory "' + dirname + '"'
         #src = os.path.join(template_dir, dirname)
         src = os.path.join(os.path.dirname(site), dirname)
         dst = os.path.join(output_dir, dirname)
         if not os.path.exists(src):
-            print '[E] Source directory not found, skipping'
+            print 'E Source directory not found, skipping'
         else:
             try:
                 shutil.copytree(src, dst, symlinks=False, ignore=None)
             except OSError:
-                print '[E] Directory already exists, skipping'
-    print ' -  done'
+                print 'E Directory already exists, skipping'
+    print '> done'
 
 
 if __name__ == '__main__':
