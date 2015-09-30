@@ -322,7 +322,7 @@ def generate_site(site, template, output_dir, clean):
     for page in error_pages:
         data['page'] = {'title': page + ' ' + error_pages[page]}
         try:
-            data['htmlbody'] = paragoo_includes(site, structure['errorpage'])
+            data['htmlbody'] = paragoo_includes(site, environment, structure['errorpage'])
         except KeyError:
             data['htmlbody'] = 'An error occurred. Use the navigation to find something else on the website or use history back to go back to where you came from.'
         output = template.render(data)
