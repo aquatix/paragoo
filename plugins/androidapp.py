@@ -27,7 +27,7 @@ def get_app_details(app_key):
         return {'title': soup.title.text.replace(' - Android-apps op Google Play', ''), 'url': url_full, 'description': description}
 
 
-def render(site_path, params):
+def render(site_path, environment, params):
     """
     Look up the Android app details from its Play Store listing
     Format of params: <app_key>:optional description
@@ -36,4 +36,6 @@ def render(site_path, params):
     app_key = params[0]
     details = get_app_details(app_key)
     # TODO: render a card(?) with the site's androidapp.html template
-    return '<a href="' + details['url'] + '">' + details['title'] + '</a>'
+    #return '<a href="' + details['url'] + '">' + details['title'] + '</a>'
+    template = environment.get_template('androidapp.html')
+    return template.render(details)

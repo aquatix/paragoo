@@ -8,7 +8,7 @@ class TileNotFoundException(Exception):
     pass
 
 
-def render(site_path, params):
+def render(site_path, environment, params):
     """
     Look up the tile file from site import import config in site_path
     Format of params: <key>
@@ -22,5 +22,6 @@ def render(site_path, params):
     else:
         raise TileNotFoundException(params[0])
     with open(filename, 'r') as f:
-        content = f.read()
-    return content
+        content = f.readline()
+        template = environment.get_template('newsitem.html')
+        return template.render(content)

@@ -30,7 +30,7 @@ def include_type_exists(key):
     return os.path.isfile(os.path.join(script_dir, 'plugins', key + '.py'))
 
 
-def render_include(site, key, params):
+def render_include(site, environment, key, params):
     """
     Render paragoo include. Typically looks like:
     @@@key=param@@@
@@ -38,10 +38,10 @@ def render_include(site, key, params):
     """
     # Load the relevant plugin
     plugin = __import__('plugins.' + key, globals(), locals(), [key], -1)
-    return plugin.render(site, params)
+    return plugin.render(site, environment, params)
 
 
-def paragoo_includes(site, body, token='@@@'):
+def paragoo_includes(site, environment, body, token='@@@'):
     """
     Filter that looks for blocks surrounded by `token` and include that content type in
     the rendered html
@@ -59,7 +59,7 @@ def paragoo_includes(site, body, token='@@@'):
                 include_params = include_parts[1].split(':')
                 print '  ' + str(include_parts)
                 if include_type_exists(include_parts[0]):
-                    result += render_include(site, include_parts[0], include_params)
+                    result += render_include(site, environment, include_parts[0], include_params)
                 else:
                     print 'E Plugin not found for include with key "' + include_parts[0] + '"'
                 is_content = True
@@ -255,7 +255,7 @@ def generate_site(site, template, output_dir, clean):
                 data['page'] = section_data
                 if 'description' in section_data:
                     data['description'] = section_data['description']
-                data['htmlbody'] = paragoo_includes(site, htmlbody)
+                data['htmlbody'] = paragoo_includes(site, environment, htmlbody)
                 data['navbar'] = navbar
                 data['active_section'] = section
                 data['active_page'] = section
@@ -293,7 +293,7 @@ def generate_site(site, template, output_dir, clean):
                 except KeyError:
                     data['author'] = site_data['author']
                 data['page'] = page_data
-                data['htmlbody'] = paragoo_includes(site, htmlbody)
+                data['htmlbody'] = paragoo_includes(site, environment, htmlbody)
                 data['navbar'] = navbar
                 data['active_section'] = section
                 data['active_page'] = page
