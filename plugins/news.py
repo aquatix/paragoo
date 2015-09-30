@@ -25,7 +25,7 @@ def render(site_path, environment, params):
         if len(params) == 3:
             first = int(params[1])
             last = int(params[2])
-        template = environment.get_template('newsitem.html')
+        template = environment.get_template('news.html')
         items = []
         counter = 1
         for item in content:
