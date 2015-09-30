@@ -19,7 +19,12 @@ def get_app_details(app_key):
         raise AppNotFoundException(params[0])
     else:
         soup = BeautifulSoup(result.text, 'html.parser')
-        return {'title': soup.title.text.replace(' - Android-apps op Google Play', ''), 'url': url_full}
+        #desc_blocks = soup.find('div', {'id': 'id-app-orig-desc'})
+        desc_blocks = soup.findAll('div', attrs={'class':'id-app-orig-desc'})
+        description = ''
+        if len(desc_blocks) > 0:
+            description = desc_blocks[0]
+        return {'title': soup.title.text.replace(' - Android-apps op Google Play', ''), 'url': url_full, 'description': description}
 
 
 def render(site_path, params):
