@@ -24,7 +24,7 @@ def get_app_details(app_key):
         description = ''
         if len(desc_blocks) > 0:
             description = desc_blocks[0]
-        return {'title': soup.title.text.replace(' - Android-apps op Google Play', ''), 'url': url_full, 'description': description}
+        return {'title': soup.title.text.replace(' - Android-apps op Google Play', ''), 'url': url_full, 'description': description, 'app_id': app_key}
 
 
 def render(site_path, environment, params):
