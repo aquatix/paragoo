@@ -149,9 +149,10 @@ def ensure_rooturi(content, pathprefix):
     href="page/section1/page1/"
     with
     href="/page/section1/page1/"
-    when 'page' is pathprefix
+    when 'page' is pathprefix; always do so for images
     """
     content = content.replace('href="' + pathprefix, 'href="/' + pathprefix)
+    content = content.replace('href="image/', 'href="/image/')
     return content
 
 
