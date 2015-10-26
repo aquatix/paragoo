@@ -143,6 +143,18 @@ def load_page_source(source_uses_subdirs, section_dir, page, page_data):
     return data
 
 
+def ensure_rooturi(content, pathprefix):
+    """
+    Replace links of the type:
+    href="page/section1/page1/"
+    with
+    href="/page/section1/page1/"
+    when 'page' is pathprefix
+    """
+    content = content.replace('href="' + pathprefix, 'href="/' + pathprefix)
+    return content
+
+
 ## Main program
 @click.group()
 def cli():
@@ -167,8 +179,9 @@ def check_config(site):
 @click.option('-t', '--template', help='Template path', prompt='Template path')
 @click.option('-o', '--output_dir', help='Output path for generated content', prompt='Output path for generated content')
 @click.option('-p', '--pathprefix', help='Prepend navigation paths with this url-part', default='')
+@click.option('--makerooturi/--nomakerooturi', help='Replace relative paths starting with pathprefix to start with a /', default=False)
 @click.option('--clean/--noclean', help='Clean the output_dir first or not', default=False)
-def generate_site(site, template, output_dir, pathprefix, clean):
+def generate_site(site, template, output_dir, pathprefix, makerooturi, clean):
     """
     Generate the website specified in the config
     """
@@ -267,6 +280,8 @@ def generate_site(site, template, output_dir, pathprefix, clean):
                 data['structure'] = structure
                 # Render the page
                 output = template.render(data)
+                if makerooturi:
+                    output = ensure_rooturi(output, pathprefix)
                 filename = os.path.join(section_filename, 'index.html')
                 ensure_dir(filename)
                 with open(filename, 'w') as pf:
@@ -305,6 +320,8 @@ def generate_site(site, template, output_dir, pathprefix, clean):
                 data['structure'] = structure
                 # Render the page
                 output = template.render(data)
+                if makerooturi:
+                    output = ensure_rooturi(output, pathprefix)
                 # Save to output_dir
                 filename = os.path.join(section_filename, page, 'index.html')
                 ensure_dir(filename)
