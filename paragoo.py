@@ -143,16 +143,18 @@ def load_page_source(source_uses_subdirs, section_dir, page, page_data):
     return data
 
 
-def ensure_rooturi(content, pathprefix):
+def template_replace(content, replacements):
     """
-    Replace links of the type:
+    Replace text in rendered page with their replacements, for example to ensure
+    absolute paths, or replace links of the type:
     href="page/section1/page1/"
     with
     href="/page/section1/page1/"
-    when 'page' is pathprefix; always do so for images
+    when 'page' is pathprefix
     """
-    content = content.replace('href="' + pathprefix, 'href="/' + pathprefix)
-    content = content.replace('href="image/', 'href="/image/')
+    #for key, value in replacements:
+    for needle in replacements:
+        content = content.replace(needle, replacements[needle])
     return content
 
 
@@ -247,6 +249,16 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean):
         # Stip leading / from the prefix
         pathprefix = pathprefix[1:]
 
+    try:
+        template_replacements = dict(structure['replacements'])
+    except KeyError:
+        template_replacements = {}
+
+    print template_replacements
+
+    if makerooturi:
+        template_replacements['href="' + pathprefix] = 'href="/' + pathprefix
+
     # Create navbar datastructure
     navbar = generate_navbar(structure, pathprefix)
 
@@ -281,8 +293,7 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean):
                 data['structure'] = structure
                 # Render the page
                 output = template.render(data)
-                if makerooturi:
-                    output = ensure_rooturi(output, pathprefix)
+                output = template_replace(output, template_replacements)
                 filename = os.path.join(section_filename, 'index.html')
                 ensure_dir(filename)
                 with open(filename, 'w') as pf:
@@ -321,8 +332,7 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean):
                 data['structure'] = structure
                 # Render the page
                 output = template.render(data)
-                if makerooturi:
-                    output = ensure_rooturi(output, pathprefix)
+                output = template_replace(output, template_replacements)
                 # Save to output_dir
                 filename = os.path.join(section_filename, page, 'index.html')
                 ensure_dir(filename)
