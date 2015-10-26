@@ -73,19 +73,19 @@ CONTENT_TYPES = {
 }
 
 
-def generate_navbar(structure):
+def generate_navbar(structure, pathprefix):
     navbar = []
     for section in structure['sections']:
         navbar_section = []
         section_data = structure['sections'][section]
-        section_url = '/' + section + '/'
+        section_url = os.path.join('/', pathprefix, section + '/')
         section_title = section_data['title']
         if 'pages' in section_data:
             for page in section_data['pages']:
-                url = '/' + section + '/' + page
+                url = os.path.join('/', pathprefix, section, page)
                 title = structure['sections'][section]['pages'][page]['title']
-                #navbar.append(structure['sections'][section]['pages'][page])
                 if title:
+                    # Only add a page to the navigation if it has a title, otherwise it's hidden
                     navbar_section.append((url, page, title))
         if section_title:
             navbar.append((section_url, section, section_title, navbar_section))
@@ -166,8 +166,9 @@ def check_config(site):
 @click.option('-s', '--site', help='Site path', prompt='Site path')
 @click.option('-t', '--template', help='Template path', prompt='Template path')
 @click.option('-o', '--output_dir', help='Output path for generated content', prompt='Output path for generated content')
+@click.option('-p', '--pathprefix', help='Prepend navigation paths with this url-part', default='')
 @click.option('--clean/--noclean', help='Clean the output_dir first or not', default=False)
-def generate_site(site, template, output_dir, clean):
+def generate_site(site, template, output_dir, pathprefix, clean):
     """
     Generate the website specified in the config
     """
@@ -228,14 +229,18 @@ def generate_site(site, template, output_dir, clean):
     except KeyError:
         print 'I Defaulting to searching sub directories for source files'
 
+    if pathprefix != '' and pathprefix[0] == '/':
+        # Stip leading / from the prefix
+        pathprefix = pathprefix[1:]
+
     # Create navbar datastructure
-    navbar = generate_navbar(structure)
+    navbar = generate_navbar(structure, pathprefix)
 
     very_first_page = True # Homepage of website, root
     for section in structure['sections']:
         # Iterate over the sections
         section_data = structure['sections'][section]
-        section_filename = os.path.join(output_dir, section)
+        section_filename = os.path.join(output_dir, pathprefix, section)
         source_section_filename = os.path.join(site, section)
         if not source_uses_subdirs:
             source_section_filename = os.path.join(site, 'pages', section)
