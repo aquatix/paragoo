@@ -363,7 +363,7 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean):
         with open(filename, 'w') as pf:
             pf.write(output)
     # Copy the directories with static assets
-    static_dirs = ['images', 'styles', 'scripts', 'static']
+    static_dirs = ['images', 'styles', 'scripts', 'css', 'font', 'js', 'static']
     for dirname in static_dirs:
         print '- copying directory "' + dirname + '"'
         #src = os.path.join(template_dir, dirname)
