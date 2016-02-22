@@ -1,4 +1,5 @@
 import os
+import stat
 import sys
 import jinja2
 import yaml
@@ -7,6 +8,37 @@ import markdown
 import shutil
 import datetime
 from collections import OrderedDict
+
+
+def copytree(src, dst, symlinks = False, ignore = None):
+  """
+  Copy a tree of files and dirs and merge into existing dir if needed
+  Source: http://stackoverflow.com/a/22331852
+  """
+  if not os.path.exists(dst):
+    os.makedirs(dst)
+    shutil.copystat(src, dst)
+  lst = os.listdir(src)
+  if ignore:
+    excl = ignore(src, lst)
+    lst = [x for x in lst if x not in excl]
+  for item in lst:
+    s = os.path.join(src, item)
+    d = os.path.join(dst, item)
+    if symlinks and os.path.islink(s):
+      if os.path.lexists(d):
+        os.remove(d)
+      os.symlink(os.readlink(s), d)
+      try:
+        st = os.lstat(s)
+        mode = stat.S_IMODE(st.st_mode)
+        os.lchmod(d, mode)
+      except:
+        pass # lchmod not available
+    elif os.path.isdir(s):
+      copytree(s, d, symlinks, ignore)
+    else:
+      shutil.copy2(s, d)
 
 
 def ordered_load(stream, Loader=yaml.Loader, object_pairs_hook=OrderedDict):
@@ -364,17 +396,20 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean):
             pf.write(output)
     # Copy the directories with static assets
     static_dirs = ['images', 'styles', 'scripts', 'css', 'font', 'js', 'static']
+    src_dirs = [template_dir, os.path.dirname(site)]
     for dirname in static_dirs:
-        print '- copying directory "' + dirname + '"'
-        src = os.path.join(template_dir, dirname)
-        dst = os.path.join(output_dir, dirname)
-        if not os.path.exists(src):
-            print 'E Source directory not found, skipping'
-        else:
-            try:
-                shutil.copytree(src, dst, symlinks=False, ignore=None)
-            except OSError:
-                print 'E Directory already exists, skipping'
+        for src_dir in src_dirs:
+            src = os.path.join(src_dir, dirname)
+            print '- copying directory "' + src + '"'
+            dst = os.path.join(output_dir, dirname)
+            if not os.path.exists(src):
+                print 'E Source directory not found, skipping'
+            else:
+                copytree(src, dst)
+                #try:
+                #    shutil.copytree(src, dst, symlinks=False, ignore=None)
+                #except OSError:
+                #    print 'E Directory already exists, skipping'
     print '> done'
 
 
