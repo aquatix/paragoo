@@ -366,8 +366,7 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean):
     static_dirs = ['images', 'styles', 'scripts', 'css', 'font', 'js', 'static']
     for dirname in static_dirs:
         print '- copying directory "' + dirname + '"'
-        #src = os.path.join(template_dir, dirname)
-        src = os.path.join(os.path.dirname(site), dirname)
+        src = os.path.join(template_dir, dirname)
         dst = os.path.join(output_dir, dirname)
         if not os.path.exists(src):
             print 'E Source directory not found, skipping'
