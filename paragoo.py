@@ -305,6 +305,7 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean):
         first_page = True # Homepage of section
         if not 'pages' in section_data:
             print '- section ' + section + ' does not have pages'
+            page_data = structure['sections'][section]
             htmlbody = load_page_source(source_uses_subdirs, source_section_filename, None, {})
             #data = load_page_source(source_uses_subdirs, os.path.dirname(source_section_filename), section, {})
             if htmlbody:
