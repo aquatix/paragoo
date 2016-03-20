@@ -266,10 +266,13 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean):
     ensure_dir(output_dir)
 
     # Site-global texts
-    site_fields = ['title', 'author', 'description', 'logo', 'copyright', 'footer', 'about_title', 'about']
+    site_fields = ['title', 'author', 'description', 'logo', 'copyright', 'footer', 'about_title', 'about', 'linkblocks']
     site_data = {}
     for field in site_fields:
-        site_data[field] = structure[field]
+        if field in structure:
+            site_data[field] = structure[field]
+        else:
+            print '! site field "' + field + '" not found'
 
     source_uses_subdirs = True
     try:
