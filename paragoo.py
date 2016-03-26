@@ -206,13 +206,7 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean):
 
     if clean:
         print 'd Cleaning up output_dir ' + output_dir
-        if os.path.exists(output_dir):
-            current_time = datetime.datetime.now()
-            dt_format = '%Y-%m-%dT%H:%M:%S%z'
-            timestamp = current_time.strftime(dt_format)
-            #dst = os.path.join(os.path.dirname(output_dir), timestamp)
-            dst = output_dir + '_' + timestamp
-            shutil.move(output_dir, dst)
+        fileutil.archive_if_exists(output_dir)
     else:
         print '! Not cleaning up, overwrite existing, keeping others'
 
