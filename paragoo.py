@@ -322,6 +322,11 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean):
                 data['page'] = section_data
                 if 'description' in section_data:
                     data['description'] = section_data['description']
+                if 'show_title' in section_data:
+                    data['show_title'] = section_data['show_title']
+                else:
+                    # Default to showing the page's title
+                    data['show_title'] = True
                 data['htmlbody'] = paragoo_includes(site, environment, htmlbody)
                 data['navbar'] = navbar
                 data['active_section'] = section
@@ -360,6 +365,11 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean):
                     data['author'] = page_data['author']
                 except KeyError:
                     data['author'] = site_data['author']
+                if 'show_title' in page_data:
+                    data['show_title'] = page_data['show_title']
+                else:
+                    # Default to showing the page's title
+                    data['show_title'] = True
                 data['page'] = page_data
                 data['htmlbody'] = paragoo_includes(site, environment, htmlbody)
                 data['navbar'] = navbar
