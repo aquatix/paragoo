@@ -7,38 +7,8 @@ import click
 import markdown
 import shutil
 import datetime
+from utilkit import fileutil
 from collections import OrderedDict
-
-
-def copytree(src, dst, symlinks = False, ignore = None):
-    """
-    Copy a tree of files and dirs and merge into existing dir if needed
-    Source: http://stackoverflow.com/a/22331852
-    """
-    if not os.path.exists(dst):
-        os.makedirs(dst)
-        shutil.copystat(src, dst)
-    lst = os.listdir(src)
-    if ignore:
-        excl = ignore(src, lst)
-        lst = [x for x in lst if x not in excl]
-    for item in lst:
-        s = os.path.join(src, item)
-        d = os.path.join(dst, item)
-        if symlinks and os.path.islink(s):
-            if os.path.lexists(d):
-                os.remove(d)
-            os.symlink(os.readlink(s), d)
-            try:
-                st = os.lstat(s)
-                mode = stat.S_IMODE(st.st_mode)
-                os.lchmod(d, mode)
-            except:
-                pass # lchmod not available
-        elif os.path.isdir(s):
-            copytree(s, d, symlinks, ignore)
-        else:
-            shutil.copy2(s, d)
 
 
 def ordered_load(stream, Loader=yaml.Loader, object_pairs_hook=OrderedDict):
@@ -124,23 +94,6 @@ def generate_navbar(structure, pathprefix):
     return navbar
 
 
-def ensure_dir(f):
-    d = os.path.dirname(f)
-    if not os.path.exists(d):
-        os.makedirs(d)
-
-
-def get_file_contents(filename):
-    data = None
-    try:
-        with open(filename) as pf:
-            data = pf.read()
-    except IOError:
-        #print 'File not found: ' + filename
-        pass
-    return data
-
-
 def load_page_source(source_uses_subdirs, section_dir, page, page_data):
     if page:
         if source_uses_subdirs:
@@ -164,12 +117,12 @@ def load_page_source(source_uses_subdirs, section_dir, page, page_data):
         # Try to find the file
         for ct in CONTENT_TYPES:
             try_filename = filename + '.' + ct
-            data = get_file_contents(try_filename)
+            data = fileutil.get_file_contents(try_filename)
             if data:
                 break
     else:
         filename += '.' + CONTENT_TYPES[content_type]
-        data = get_file_contents(filename)
+        data = fileutil.get_file_contents(filename)
     if data and content_type == 'markdown':
         data = markdown.markdown(data, output_format='html5')
     return data
@@ -263,7 +216,7 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean):
     else:
         print '! Not cleaning up, overwrite existing, keeping others'
 
-    ensure_dir(output_dir)
+    fileutil.ensure_dir_exists(output_dir)
 
     # Site-global texts
     site_fields = ['title', 'author', 'description', 'logo', 'copyright', 'footer', 'about_title', 'about', 'linkblocks']
@@ -336,7 +289,7 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean):
                 output = template.render(data)
                 output = template_replace(output, template_replacements)
                 filename = os.path.join(section_filename, 'index.html')
-                ensure_dir(filename)
+                fileutil.ensure_dir_exists(filename)
                 with open(filename, 'w') as pf:
                     pf.write(output)
                 if first_page:
@@ -381,7 +334,7 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean):
                 output = template_replace(output, template_replacements)
                 # Save to output_dir
                 filename = os.path.join(section_filename, page, 'index.html')
-                ensure_dir(filename)
+                fileutil.ensure_dir_exists(filename)
                 with open(filename, 'w') as pf:
                     pf.write(output)
                 if first_page:
@@ -419,7 +372,7 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean):
             if not os.path.exists(src):
                 print 'E Source directory not found, skipping'
             else:
-                copytree(src, dst)
+                fileutil.copytree(src, dst)
                 #try:
                 #    shutil.copytree(src, dst, symlinks=False, ignore=None)
                 #except OSError:

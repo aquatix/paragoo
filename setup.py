@@ -34,7 +34,7 @@ setup(
 
     # as a practice no need to hard code version unless you know program wont
     # work unless the specific versions are used
-    install_requires=['Jinja2', 'Markdown', 'MarkupSafe', 'PyYAML', 'click'],
+    install_requires=['Jinja2', 'Markdown', 'MarkupSafe', 'PyYAML', 'click', 'utilkit'],
 
     py_modules=['paragoo'],
 

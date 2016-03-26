@@ -5,4 +5,5 @@ PyYAML==3.11
 argparse==1.2.1
 click==6.3
 requests==2.9.1
+utilkit==0.1.5
 wsgiref==0.1.2
