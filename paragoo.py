@@ -202,7 +202,11 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean):
 
     #environment.filters['paragoo_includes'] = paragoo_includes
 
-    template = environment.get_template('base.html')
+    try:
+        template = environment.get_template('base.html')
+    except jinja2.exceptions.TemplateNotFound as e:
+        print 'E Template not found: ' + str(e) + ' in template dir ' + template_dir
+        sys.exit(2)
 
     if clean:
         print 'd Cleaning up output_dir ' + output_dir
