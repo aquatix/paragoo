@@ -365,11 +365,13 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean):
     for dirname in static_dirs:
         for src_dir in src_dirs:
             src = os.path.join(src_dir, dirname)
-            print '- copying directory "' + src + '"'
+            #print '- copying directory "' + src + '"'
             dst = os.path.join(output_dir, dirname)
             if not os.path.exists(src):
-                print 'E Source directory not found, skipping'
+                #print 'E Source directory not found, skipping'
+                pass
             else:
+                print '- copying directory "' + src + '"'
                 fileutil.copytree(src, dst)
                 #try:
                 #    shutil.copytree(src, dst, symlinks=False, ignore=None)
