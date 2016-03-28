@@ -227,6 +227,11 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean):
         else:
             print '! site field "' + field + '" not found'
 
+    site_css = os.path.join(os.path.dirname(site), 'css')
+    if os.path.exists(site_css):
+        print 'I site has css that template might want to include'
+        # TODO: implement listing of the files in css/ and put them in a list in site_fields
+
     source_uses_subdirs = True
     try:
         source_uses_subdirs = structure['subdirs']
