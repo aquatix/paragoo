@@ -219,7 +219,7 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean):
     fileutil.ensure_dir_exists(output_dir)
 
     # Site-global texts
-    site_fields = ['title', 'author', 'description', 'logo', 'copyright', 'footer', 'about_title', 'about', 'linkblocks']
+    site_fields = ['title', 'author', 'description', 'logo', 'mobiletoggle', 'copyright', 'footer', 'about_title', 'about', 'linkblocks']
     site_data = {}
     for field in site_fields:
         if field in structure:
