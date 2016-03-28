@@ -82,7 +82,9 @@ def generate_navbar(structure, pathprefix):
         section_data = structure['sections'][section]
         section_url = os.path.join('/', pathprefix, section + '/')
         section_title = section_data['title']
+        section_hassub = False
         if 'pages' in section_data:
+            section_hassub = True
             for page in section_data['pages']:
                 url = os.path.join('/', pathprefix, section, page)
                 title = structure['sections'][section]['pages'][page]['title']
@@ -90,7 +92,7 @@ def generate_navbar(structure, pathprefix):
                     # Only add a page to the navigation if it has a title, otherwise it's hidden
                     navbar_section.append((url, page, title))
         if section_title:
-            navbar.append((section_url, section, section_title, navbar_section))
+            navbar.append((section_url, section, section_title, section_hassub, navbar_section))
     return navbar
 
 
