@@ -231,6 +231,10 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean):
     if os.path.exists(site_css):
         print 'I site has css that template might want to include'
         # TODO: implement listing of the files in css/ and put them in a list in site_fields
+        css_files = fileutil.list_files(site_css, extension='css')
+        site_data['site_css'] = []
+        for css in css_files:
+            site_data['site_css'].append('/css/' + css)
 
     source_uses_subdirs = True
     try:
