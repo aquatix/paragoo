@@ -2,25 +2,11 @@ import os
 import stat
 import sys
 import jinja2
-import yaml
 import click
 import markdown
 import shutil
 import datetime
 from utilkit import fileutil
-from collections import OrderedDict
-
-
-def ordered_load(stream, Loader=yaml.Loader, object_pairs_hook=OrderedDict):
-    class OrderedLoader(Loader):
-        pass
-    def construct_mapping(loader, node):
-        loader.flatten_mapping(node)
-        return object_pairs_hook(loader.construct_pairs(node))
-    OrderedLoader.add_constructor(
-        yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG,
-        construct_mapping)
-    return yaml.load(stream, OrderedLoader)
 
 
 def include_type_exists(key):
@@ -187,7 +173,7 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean):
 
         print('r Reading structure from ' + os.path.join(site, 'site.yaml'))
 
-        structure = ordered_load(f, yaml.SafeLoader)
+        structure = fileutil.yaml_ordered_load(f, fileutil.yaml.SafeLoader)
         f.close()
     except IOError as e:
         print e
