@@ -108,9 +108,10 @@ def load_page_source(source_uses_subdirs, section_dir, page, page_data):
     if content_type == 'unknown':
         # Try to find the file
         for ct in CONTENT_TYPES:
-            try_filename = filename + '.' + ct
+            try_filename = filename + '.' + CONTENT_TYPES[ct]
             data = fileutil.get_file_contents(try_filename)
             if data:
+                content_type = ct
                 break
     else:
         filename += '.' + CONTENT_TYPES[content_type]
