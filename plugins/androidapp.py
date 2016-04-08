@@ -24,6 +24,12 @@ def get_app_details(app_key):
         description = ''
         if len(desc_blocks) > 0:
             description = desc_blocks[0]
+            try:
+                # Get the first (language) block, likely english
+                children = desc_blocks[0].findChildren()
+                description = children[0]
+            except KeyError:
+                pass
         return {'title': soup.title.text.replace(' - Android-apps op Google Play', ''), 'url': url_full, 'description': description, 'app_id': app_key}
 
 
