@@ -41,6 +41,10 @@ def render(site_path, environment, params):
     """
     app_key = params[0]
     details = get_app_details(app_key)
+    try:
+        details['notes'] = params[1]
+    except IndexError:
+        pass
     # TODO: render a card(?) with the site's androidapp.html template
     #return '<a href="' + details['url'] + '">' + details['title'] + '</a>'
     template = environment.get_template('androidapp.html')
