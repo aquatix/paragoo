@@ -20,7 +20,7 @@ def get_app_details(app_key):
     else:
         soup = BeautifulSoup(result.text, 'html.parser')
         #desc_blocks = soup.find('div', {'id': 'id-app-orig-desc'})
-        desc_blocks = soup.findAll('div', attrs={'class':'id-app-orig-desc'})
+        desc_blocks = soup.findAll('div', attrs={'class':'show-more-content'})
         description = ''
         if len(desc_blocks) > 0:
             description = desc_blocks[0]
