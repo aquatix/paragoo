@@ -117,7 +117,7 @@ def load_page_source(source_uses_subdirs, section_dir, page, page_data):
         filename += '.' + CONTENT_TYPES[content_type]
         data = fileutil.get_file_contents(filename)
     if data and content_type == 'markdown':
-        data = markdown.markdown(data, output_format='html5')
+        data = markdown.markdown(data, output_format='html5', extensions=['markdown.extensions.toc'])
     return data
 
 
