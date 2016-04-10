@@ -46,7 +46,7 @@ def paragoo_includes(site, environment, body, token='@@@'):
             else:
                 include_parts = part.split('=')
                 include_params = include_parts[1].split(':')
-                print '  ' + str(include_parts)
+                #print '  ' + str(include_parts)
                 if include_type_exists(include_parts[0]):
                     result += render_include(site, environment, include_parts[0], include_params)
                 else:
@@ -249,8 +249,6 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean):
     except KeyError:
         template_replacements = {}
 
-    print template_replacements
-
     if makerooturi:
         template_replacements['href="' + pathprefix] = 'href="/' + pathprefix
 
@@ -267,7 +265,7 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean):
             source_section_filename = os.path.join(site, 'pages', section)
         first_page = True # Homepage of section
         if not 'pages' in section_data:
-            print '- section ' + section + ' does not have pages'
+            print 'I section ' + section + ' does not have pages'
             page_data = structure['sections'][section]
             htmlbody = load_page_source(source_uses_subdirs, source_section_filename, None, {})
             #data = load_page_source(source_uses_subdirs, os.path.dirname(source_section_filename), section, {})
