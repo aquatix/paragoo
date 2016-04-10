@@ -1,9 +1,19 @@
-Jinja2==2.8
-Markdown==2.6.5
-MarkupSafe==0.23
-PyYAML==3.11
+# Templating
+Jinja2
+# Markdown files
+Markdown
+MarkupSafe
+# ReST files
+docutils
+pygments
+# yaml config
+PyYAML
+# Default python
 argparse==1.2.1
-click==6.3
-requests==2.9.1
-utilkit==0.1.5
 wsgiref==0.1.2
+# CLI interface
+click
+# Downloading content from the web
+requests
+# Toolkit for interacting with files, formatting and more
+utilkit>=0.3
