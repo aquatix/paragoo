@@ -3,14 +3,12 @@ Jinja2
 # Markdown files
 Markdown
 MarkupSafe
-# ReST files
+# ReST (reStructuredText) files
 docutils
+# Syntax highlighting
 pygments
 # yaml config
 PyYAML
-# Default python
-argparse==1.2.1
-wsgiref==0.1.2
 # CLI interface
 click
 # Downloading content from the web
