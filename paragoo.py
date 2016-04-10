@@ -4,6 +4,7 @@ import sys
 import jinja2
 import click
 import markdown
+from docutils.core import publish_parts
 import shutil
 import datetime
 from utilkit import fileutil
@@ -56,6 +57,7 @@ def paragoo_includes(site, environment, body, token='@@@'):
 
 CONTENT_TYPES = {
     'markdown': 'md',
+    'rest': 'rst',
     'html': 'html',
     'gallery': 'gallery',
 }
@@ -116,8 +118,13 @@ def load_page_source(source_uses_subdirs, section_dir, page, page_data):
     else:
         filename += '.' + CONTENT_TYPES[content_type]
         data = fileutil.get_file_contents(filename)
+    if not data:
+        print('E ' + filename + ' not found!')
+        sys.exit(42)
     if data and content_type == 'markdown':
         data = markdown.markdown(data, output_format='html5', extensions=['markdown.extensions.toc'])
+    elif data and content_type == 'rest':
+        data = publish_parts(data, writer_name='html')['html_body']
     return data
 
 
