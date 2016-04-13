@@ -1,9 +1,4 @@
-=========
-Changelog
-=========
-
-v0.2.0
-------
+## v0.2.0 (unreleased)
 
 2016-04-??
 
@@ -21,9 +16,7 @@ v0.2.0
 - Table-of-contents support for Markdown (`[TOC]`)
 - ReST (reStructuredText) support
 
-
-v0.1.0
-------
+## v0.1.0
 
 2016-03-26
 
