@@ -1,7 +1,6 @@
 """
 paragoo plugin for retrieving card on an Android app
 """
-import os
 import requests
 from bs4 import BeautifulSoup
 
@@ -48,7 +47,5 @@ def render(site_path, environment, params):
             details['notes'] = ':'.join(params[1:])
     except IndexError:
         pass
-    # TODO: render a card(?) with the site's androidapp.html template
-    #return '<a href="' + details['url'] + '">' + details['title'] + '</a>'
     template = environment.get_template('androidapp.html')
     return template.render(details)
