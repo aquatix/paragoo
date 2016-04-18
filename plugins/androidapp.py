@@ -43,6 +43,9 @@ def render(site_path, environment, params):
     details = get_app_details(app_key)
     try:
         details['notes'] = params[1]
+        if len(params) > 2:
+            # The description contained one or more colons, lets fix this
+            details['notes'] = ':'.join(params[1:])
     except IndexError:
         pass
     # TODO: render a card(?) with the site's androidapp.html template
