@@ -116,6 +116,9 @@ def generate_sitemap(structure, list_hidden=False):
                     sitemap_section.append((url, page, page))
         if section_title:
             sitemap.append((section_url, section, section_title, section_hassub, sitemap_section))
+
+    # Generate page from the sitemap
+    #data = markdown.markdown(data, output_format='html5', extensions=['markdown.extensions.toc'])
     return sitemap
 
 
@@ -246,6 +249,11 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean):
         print '! Not cleaning up, overwrite existing, keeping others'
 
     fileutil.ensure_dir_exists(output_dir)
+
+    # Is the generation of a sitemap page wanted?
+    sitemap_wanted = False
+    if 'sitemap' in structure and structure['sitemap'] == True:
+        sitemap_wanted = True
 
     # Site-global texts
     site_fields = ['title', 'author', 'description', 'logo', 'mobiletoggle', 'copyright', 'footer', 'about_title', 'about', 'linkblocks']
