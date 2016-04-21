@@ -64,6 +64,9 @@ CONTENT_TYPES = {
 
 
 def generate_navbar(structure, pathprefix):
+    """
+    Returns 2D list containing the nested navigational structure of the website
+    """
     navbar = []
     for section in structure['sections']:
         navbar_section = []
@@ -86,6 +89,34 @@ def generate_navbar(structure, pathprefix):
         if section_title:
             navbar.append((section_url, section, section_title, section_hassub, navbar_section))
     return navbar
+
+
+def generate_sitemap(structure, list_hidden=False):
+    """
+    Generate sitemap page, based on navigation; option to show 'hidden' pages
+    """
+    sitemap = []
+    for section in structure['sections']:
+        sitemap_section = []
+        section_data = structure['sections'][section]
+        section_url = os.path.join('/', pathprefix, section + '/')
+        section_title = section_data['title']
+        section_hassub = False
+        if 'pages' in section_data:
+            section_hassub = True
+            for page in section_data['pages']:
+                url = os.path.join('/', pathprefix, section, page)
+                title = structure['sections'][section]['pages'][page]['title']
+                if title:
+                    # Only add a page to the navigation if it has a title, otherwise it's hidden
+                    sitemap_section.append((url, page, title))
+                elif not title and list_hidden:
+                    # The page does not have a title, so would normally be hidden, but show because of list_hidden
+                    # Use `page` for title
+                    sitemap_section.append((url, page, page))
+        if section_title:
+            sitemap.append((section_url, section, section_title, section_hassub, sitemap_section))
+    return sitemap
 
 
 def load_page_source(source_uses_subdirs, section_dir, page, page_data):
