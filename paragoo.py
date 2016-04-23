@@ -271,6 +271,7 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean, ca
     if cachebuster:
         CACHEBUSTER = str(int(datetimeutil.python_to_unix(datetime.datetime.now())))
 
+    files_to_rename = {}
     for resource in styling:
         site_res = os.path.join(os.path.dirname(site), resource)
         if os.path.exists(site_res):
@@ -281,6 +282,7 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean, ca
             for res in res_files:
                 if cachebuster:
                     site_data['site_' + resource].append('/' + resource + '/' + fileutil.filename_addstring(res, '_' + CACHEBUSTER))
+                    files_to_rename[res] = fileutil.filename_addstring(res, '_' + CACHEBUSTER)
                 else:
                     site_data['site_' + resource].append('/' + resource + '/' + res)
 
@@ -429,7 +431,7 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean, ca
                 pass
             else:
                 print '- copying directory "' + src + '"'
-                fileutil.copytree(src, dst)
+                fileutil.copytree(src, dst, rename=files_to_rename)
                 #try:
                 #    shutil.copytree(src, dst, symlinks=False, ignore=None)
                 #except OSError:
