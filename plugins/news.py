@@ -32,6 +32,9 @@ def render(site_path, environment, params):
             if item.strip() and counter >= first and counter <= last:
                 parts = item.split('=')
                 key = parts[0]
+                if key[0] == '#':
+                    # Skip this entry
+                    continue
                 del parts[0]
                 content = '='.join(parts) # content may/will contain ='s
                 content = content.replace('\\n', '\n')
