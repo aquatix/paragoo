@@ -15,6 +15,9 @@
 - Better Android app info from the tag plugin
 - Table-of-contents support for Markdown (`[TOC]`)
 - ReST (reStructuredText) support
+- (Initial) Support for generating a sitemap
+- Cache busting for styling and script assets
+
 
 ## v0.1.0
 
