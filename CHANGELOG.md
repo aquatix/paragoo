@@ -16,7 +16,8 @@
 - Table-of-contents support for Markdown (`[TOC]`)
 - ReST (reStructuredText) support
 - (Initial) Support for generating a sitemap
-- Cache busting for styling and script assets
+- Cache busting for styling and script assets (append timestamp to filename), automatically renaming files where needed
+- Support comments in news listings, skipping the item
 
 
 ## v0.1.0
