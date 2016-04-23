@@ -7,7 +7,7 @@ import markdown
 from docutils.core import publish_parts
 import shutil
 import datetime
-from utilkit import fileutil
+from utilkit import fileutil, datetimeutil
 
 
 def include_type_exists(key):
@@ -203,7 +203,8 @@ def check_config(site):
 @click.option('-p', '--pathprefix', help='Prepend navigation paths with this url-part', default='')
 @click.option('--makerooturi/--nomakerooturi', help='Replace relative paths starting with pathprefix to start with a /', default=False)
 @click.option('--clean/--noclean', help='Clean the output_dir first or not', default=False)
-def generate_site(site, template, output_dir, pathprefix, makerooturi, clean):
+@click.option('--cachebuster/--nocachebuster', help='Add cache-busting timestamp to stylesheet assets', default=False)
+def generate_site(site, template, output_dir, pathprefix, makerooturi, clean, cachebuster):
     """
     Generate the website specified in the config
     """
@@ -264,14 +265,24 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean):
         else:
             print '! site field "' + field + '" not found'
 
-    site_css = os.path.join(os.path.dirname(site), 'css')
-    if os.path.exists(site_css):
-        print 'I site has css that template might want to include'
-        # TODO: implement listing of the files in css/ and put them in a list in site_fields
-        css_files = fileutil.list_files(site_css, extension='css')
-        site_data['site_css'] = []
-        for css in css_files:
-            site_data['site_css'].append('/css/' + css)
+    # Add styling and script related resources to template namespace
+    styling = ['css', 'styles', 'scripts']
+
+    if cachebuster:
+        CACHEBUSTER = str(int(datetimeutil.python_to_unix(datetime.datetime.now())))
+
+    for resource in styling:
+        site_res = os.path.join(os.path.dirname(site), resource)
+        if os.path.exists(site_res):
+            print 'I site has ' + resource + ' that template might want to include'
+            res_files = fileutil.list_files(site_res, extension='css')
+            res_files += fileutil.list_files(site_res, extension='js')
+            site_data['site_' + resource] = []
+            for res in res_files:
+                if cachebuster:
+                    site_data['site_' + resource].append('/' + resource + '/' + fileutil.filename_addstring(res, '_' + CACHEBUSTER))
+                else:
+                    site_data['site_' + resource].append('/' + resource + '/' + res)
 
     source_uses_subdirs = True
     try:
