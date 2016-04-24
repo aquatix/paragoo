@@ -6,6 +6,34 @@ simple `yaml`_ file with the structure of the site, the source
 Markdown/HTML content files and the `Jinja2`_ based templates and builds
 a directory structure with the final website.
 
+|PyPI version| |PyPI downloads| |PyPI license|
+
+Installation
+------------
+
+From PyPI
+~~~~~~~~~
+
+Assuming you already are inside a virtualenv:
+
+.. code-block:: bash
+
+    pip install paragoo
+
+From Git
+~~~~~~~~
+
+Create a new virtualenv (if you are not already in one) and install the
+necessary packages:
+
+.. code-block:: bash
+
+    git clone https://github.com/aquatix/paragoo.git
+    cd paragoo
+    mkvirtualenv paragoo # or whatever project you are working on
+    pip install -r requirements.txt
+
+
 Usage
 -----
 
@@ -37,10 +65,12 @@ To see what commands are available, run paragoo with ``--help``:
 
     python paragoo.py generate_site --help
 
+
 Templates
 ---------
 
 Some pre-made templates to go with paragoo: `paragoo material theme`_.
+
 
 parawah?
 --------
@@ -51,4 +81,10 @@ The name is derived from παράγω, which is Greek for ‘generate’,
 .. _paragoo: https://github.com/aquatix/paragoo
 .. _yaml: https://en.wikipedia.org/wiki/YAML
 .. _Jinja2: http://jinja.pocoo.org/
+.. |PyPI version| image:: https://img.shields.io/pypi/v/paragoo.svg
+   :target: https://pypi.python.org/pypi/paragoo/
+.. |PyPI downloads| image:: https://img.shields.io/pypi/dm/paragoo.svg
+   :target: https://pypi.python.org/pypi/paragoo/
+.. |PyPI license| image:: https://img.shields.io/github/license/aquatix/paragoo.svg
+   :target: https://pypi.python.org/pypi/paragoo/
 .. _paragoo material theme: https://github.com/aquatix/paragoo-theme-material
