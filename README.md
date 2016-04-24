@@ -1,7 +1,7 @@
 paragoo
 -------
 
-paragoo is a static site generator, written in Python. It takes a simple [yaml](https://en.wikipedia.org/wiki/YAML) file with the structure of the site, the source Markdown/HTML content files and the [Jinja2](http://jinja.pocoo.org/) based templates and builds a directory structure with the final website.
+[paragoo](https://github.com/aquatix/paragoo) is a static site generator, written in Python. It takes a simple [yaml](https://en.wikipedia.org/wiki/YAML) file with the structure of the site, the source Markdown/HTML content files and the [Jinja2](http://jinja.pocoo.org/) based templates and builds a directory structure with the final website.
 
 ## Usage
 
@@ -18,7 +18,17 @@ python paragoo.py generate_site --clean -s ../aquariusoft.org/site -t ../aquariu
 
 or:
 
-python paragoo.py generate_site --clean -s ../../../website/mydomain.net/site -t ../paragoo-theme-material/build/material-grey --pathprefix page --makerooturi -o /srv/mydomain.net
+python paragoo.py generate_site --clean --cachebuster -s ../../../website/mydomain.net/site -t ../paragoo-theme-material/build/material-grey --pathprefix page --makerooturi -o /srv/mydomain.net
+```
+
+To see what commands are available, run paragoo with `--help`:
+
+```
+python paragoo.py --help
+
+or:
+
+python paragoo.py generate_site --help
 ```
 
 ## Templates
