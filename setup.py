@@ -1,4 +1,5 @@
-"""A setuptools based setup module.
+"""
+A setuptools based setup module.
 See:
 https://packaging.python.org/en/latest/distributing.html
 https://github.com/pypa/sampleproject
@@ -16,7 +17,7 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
 setup(
-    name='paragoo', # pip install pocket
+    name='paragoo', # pip install paragoo
     description='Static site generator',
     #long_description=open('README.md', 'rt').read(),
     long_description=long_description,
@@ -29,7 +30,7 @@ setup(
     author='Michiel Scholten',
     author_email='michiel@diginaut.net',
 
-    url='https://github.com/aquatix/paragoo/',
+    url='https://github.com/aquatix/paragoo',
     license='Apache',
 
     # as a practice no need to hard code version unless you know program wont
