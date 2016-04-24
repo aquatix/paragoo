@@ -1,5 +1,5 @@
 paragoo
--------
+=======
 
 `paragoo`_ is a static site generator, written in Python. It takes a
 simple `yaml`_ file with the structure of the site, the source
