@@ -15,7 +15,7 @@ def get_app_details(app_key):
     url_params = {'id': app_key }
     result = requests.get(url, params=url_params)
     if result.status_code != requests.codes.ok:
-        raise AppNotFoundException(params[0])
+        raise AppNotFoundException(app_key)
     else:
         soup = BeautifulSoup(result.text, 'html.parser')
         #desc_blocks = soup.find('div', {'id': 'id-app-orig-desc'})
