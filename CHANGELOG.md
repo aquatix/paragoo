@@ -1,6 +1,13 @@
-## v0.2.0 (unreleased)
+## v0.3.0 (unreleased)
 
-2016-04-??
+2016-05-??
+
+- TODO
+
+
+## v0.2.0
+
+2016-04-24
 
 - More robust template loading
 - Less verbose on generating things (less output)
