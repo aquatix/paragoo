@@ -78,6 +78,13 @@ parawah?
 The name is derived from παράγω, which is Greek for ‘generate’,
 ‘produce’.
 
+
+What's new?
+-----------
+
+See the `Changelog`_.
+
+
 .. _paragoo: https://github.com/aquatix/paragoo
 .. _yaml: https://en.wikipedia.org/wiki/YAML
 .. _Jinja2: http://jinja.pocoo.org/
@@ -88,3 +95,4 @@ The name is derived from παράγω, which is Greek for ‘generate’,
 .. |PyPI license| image:: https://img.shields.io/github/license/aquatix/paragoo.svg
    :target: https://pypi.python.org/pypi/paragoo/
 .. _paragoo material theme: https://github.com/aquatix/paragoo-theme-material
+.. _Changelog: https://github.com/aquatix/paragoo/blob/master/CHANGELOG.md
