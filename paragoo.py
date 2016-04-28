@@ -37,21 +37,27 @@ def paragoo_includes(site, environment, body, token='@@@'):
     """
     result = ''
     if body:
-        body_parts = body.split(token)
-        is_content = True
-        for part in body_parts:
-            if is_content:
-                result += part
-                is_content = False
-            else:
-                include_parts = part.split('=')
-                include_params = include_parts[1].split(':')
-                #print '  ' + str(include_parts)
-                if include_type_exists(include_parts[0]):
-                    result += render_include(site, environment, include_parts[0], include_params)
+        while True:
+            body_parts = body.split(token)
+            print len(body_parts)
+            if len(body_parts) == 1:
+                # We're done recursing
+                break
+            is_content = True
+            for part in body_parts:
+                if is_content:
+                    result += part
+                    is_content = False
                 else:
-                    print 'E Plugin not found for include with key "' + include_parts[0] + '"'
-                is_content = True
+                    include_parts = part.split('=')
+                    include_params = include_parts[1].split(':')
+                    #print '  ' + str(include_parts)
+                    if include_type_exists(include_parts[0]):
+                        result += render_include(site, environment, include_parts[0], include_params)
+                    else:
+                        print 'E Plugin not found for include with key "' + include_parts[0] + '"'
+                    is_content = True
+            body = result
     return result
 
 
