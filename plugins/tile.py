@@ -2,6 +2,7 @@
 paragoo plugin for loading tiles
 """
 import os
+import markdown
 from utilkit import fileutil
 
 
@@ -18,9 +19,10 @@ def render(site_path, environment, params):
     print os.path.join(site_path, 'tiles', params[0] + '.md')
     if os.path.isfile(os.path.join(site_path, 'tiles', params[0] + '.md')):
         filename = os.path.join(site_path, 'tiles', params[0] + '.md')
+        data = fileutil.get_file_contents(filename)
+        return markdown.markdown(data, output_format='html5', extensions=['markdown.extensions.toc'])
     elif os.path.isfile(os.path.join(site_path, 'tiles', params[0] + '.html')):
         filename = os.path.join(site_path, 'tiles', params[0] + '.html')
+        return fileutil.get_file_contents(filename)
     else:
         raise TileNotFoundException(params[0])
-
-    return fileutil.get_file_contents(filename)
