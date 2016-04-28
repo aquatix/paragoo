@@ -2,6 +2,7 @@
 paragoo plugin for loading tiles
 """
 import os
+from utilkit import fileutil
 
 
 class TileNotFoundException(Exception):
@@ -21,7 +22,5 @@ def render(site_path, environment, params):
         filename = os.path.join(site_path, 'tiles', params[0] + '.html')
     else:
         raise TileNotFoundException(params[0])
-    with open(filename, 'r') as f:
-        content = f.readline()
-        template = environment.get_template('newsitem.html')
-        return template.render(content)
+
+    return fileutil.get_file_contents(filename)
