@@ -35,14 +35,13 @@ def paragoo_includes(site, environment, body, token='@@@'):
     Filter that looks for blocks surrounded by `token` and include that content type in
     the rendered html
     """
-    result = ''
     if body:
         while True:
+            result = u''
             body_parts = body.split(token)
-            print len(body_parts)
             if len(body_parts) == 1:
                 # We're done recursing
-                break
+                return body
             is_content = True
             for part in body_parts:
                 if is_content:
