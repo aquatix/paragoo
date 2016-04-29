@@ -2,7 +2,10 @@
 
 2016-05-??
 
-- TODO
+- Fixed AppNotFoundException in androidapp plugin
+- Tags are now recursively expanded (so a tile inside a news item gets rendered)
+- Markdown support for tiles
+- Minor bugfixes
 
 
 ## v0.2.0
