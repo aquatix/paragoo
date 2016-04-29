@@ -6,7 +6,7 @@ simple `yaml`_ file with the structure of the site, the source
 Markdown/HTML content files and the `Jinja2`_ based templates and builds
 a directory structure with the final website.
 
-|PyPI version| |PyPI downloads| |PyPI license|
+|PyPI version| |PyPI downloads| |PyPI license| |Code health|
 
 Installation
 ------------
@@ -94,5 +94,8 @@ See the `Changelog`_.
    :target: https://pypi.python.org/pypi/paragoo/
 .. |PyPI license| image:: https://img.shields.io/github/license/aquatix/paragoo.svg
    :target: https://pypi.python.org/pypi/paragoo/
+.. |Code health| image:: https://landscape.io/github/aquatix/paragoo/master/landscape.svg?style=flat
+   :target: https://landscape.io/github/aquatix/paragoo/master
+   :alt: Code Health
 .. _paragoo material theme: https://github.com/aquatix/paragoo-theme-material
 .. _Changelog: https://github.com/aquatix/paragoo/blob/master/CHANGELOG.md
