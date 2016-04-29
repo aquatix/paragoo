@@ -96,7 +96,7 @@ def generate_navbar(structure, pathprefix):
     return navbar
 
 
-def generate_sitemap(structure, list_hidden=False):
+def generate_sitemap(structure, pathprefix, list_hidden=False):
     """
     Generate sitemap page, based on navigation; option to show 'hidden' pages
     """
