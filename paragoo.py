@@ -1,11 +1,9 @@
 import os
-import stat
 import sys
 import jinja2
 import click
 import markdown
 from docutils.core import publish_parts
-import shutil
 import datetime
 from utilkit import fileutil, datetimeutil
 
@@ -418,7 +416,8 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean, ca
         try:
             data['htmlbody'] = paragoo_includes(site, environment, structure['errorpage'])
         except KeyError:
-            data['htmlbody'] = 'An error occurred. Use the navigation to find something else on the website or use history back to go back to where you came from.'
+            data['htmlbody'] = 'An error occurred. Use the navigation to find something else on the website or use history back to go back to where ' \
+                               'you came from.'
         output = template.render(data)
         filename = os.path.join(output_dir, page + '.html')
         with open(filename, 'w') as pf:
