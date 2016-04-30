@@ -1,12 +1,12 @@
 paragoo
 =======
 
+|PyPI version| |PyPI downloads| |PyPI license| |Code health|
+
 `paragoo`_ is a static site generator, written in Python. It takes a
 simple `yaml`_ file with the structure of the site, the source
 Markdown/HTML content files and the `Jinja2`_ based templates and builds
 a directory structure with the final website.
-
-|PyPI version| |PyPI downloads| |PyPI license| |Code health|
 
 Installation
 ------------
