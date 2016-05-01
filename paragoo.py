@@ -304,7 +304,7 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean, ca
     except KeyError:
         template_replacements = {}
 
-    if makerooturi:
+    if makerooturi and pathprefix:
         template_replacements['href="' + pathprefix] = 'href="/' + pathprefix
 
     # Create navbar datastructure
