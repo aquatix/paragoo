@@ -323,7 +323,6 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean, ca
             print 'I section ' + section + ' does not have pages'
             page_data = structure['sections'][section]
             htmlbody = load_page_source(source_uses_subdirs, source_section_filename, None, {})
-            #data = load_page_source(source_uses_subdirs, os.path.dirname(source_section_filename), section, {})
             if htmlbody:
                 # Template variables
                 data = site_data.copy()
@@ -436,10 +435,6 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean, ca
             else:
                 print '- copying directory "' + src + '"'
                 fileutil.copytree(src, dst, rename=files_to_rename)
-                #try:
-                #    shutil.copytree(src, dst, symlinks=False, ignore=None)
-                #except OSError:
-                #    print 'E Directory already exists, skipping'
     print '> done'
 
 
