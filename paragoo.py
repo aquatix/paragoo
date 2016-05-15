@@ -260,7 +260,8 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean, ca
         sitemap_wanted = True
 
     # Site-global texts
-    site_fields = ['title', 'author', 'description', 'logo', 'mobiletoggle', 'copyright', 'footer', 'about_title', 'about', 'linkblocks']
+    site_fields = ['title', 'author', 'description', 'logo', 'mobiletoggle', 'copyright', 'footer', 'about_title',
+                   'about', 'linkblocks', 'googleanalytics', 'piwikurl', 'piwikdomains', 'piwikkey']
     site_data = {}
     for field in site_fields:
         if field in structure:
