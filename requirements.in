@@ -1,0 +1,18 @@
+# Templating
+Jinja2
+# Markdown files
+Markdown
+MarkupSafe
+# ReST (reStructuredText) files
+docutils
+# Syntax highlighting
+pygments
+# yaml config
+PyYAML
+# CLI interface
+click
+# Downloading content from the web
+requests
+bs4
+# Toolkit for interacting with files, formatting and more
+utilkit>=0.3
