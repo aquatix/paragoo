@@ -11,7 +11,7 @@ docutils==0.13.1
 future==0.16.0            # via utilkit
 Jinja2==2.9.5
 Markdown==2.6.8
-MarkupSafe==0.23          # via jinja2
+MarkupSafe==1.0           # via jinja2
 pygments==2.2.0
 pytz==2016.10             # via utilkit
 PyYAML==3.12
