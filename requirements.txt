@@ -4,16 +4,18 @@
 #
 #    pip-compile --output-file requirements.txt requirements.in
 #
-beautifulsoup4==4.5.3     # via bs4
+beautifulsoup4==4.6.0     # via bs4
 bs4==0.0.1
 click==6.7
 docutils==0.13.1
 future==0.16.0            # via utilkit
-Jinja2==2.9.5
-Markdown==2.6.8
-MarkupSafe==1.0           # via jinja2
+jinja2==2.9.6
+markdown==2.6.8
+markupsafe==1.0           # via jinja2
 pygments==2.2.0
-pytz==2016.10             # via utilkit
-PyYAML==3.12
+pytz==2017.2              # via utilkit
+pyyaml==3.12
 requests==2.13.0
 utilkit==0.4.0
+
+pkg-resources==0.0.0      # needed for some virtualenvs
