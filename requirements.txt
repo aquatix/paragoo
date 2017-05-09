@@ -15,7 +15,7 @@ markupsafe==1.0           # via jinja2
 pygments==2.2.0
 pytz==2017.2              # via utilkit
 pyyaml==3.12
-requests==2.13.0
+requests==2.14.1
 utilkit==0.4.0
 
 pkg-resources==0.0.0      # needed for some virtualenvs
