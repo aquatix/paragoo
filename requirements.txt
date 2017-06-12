@@ -6,16 +6,20 @@
 #
 beautifulsoup4==4.6.0     # via bs4
 bs4==0.0.1
+certifi==2017.4.17        # via requests
+chardet==3.0.4            # via requests
 click==6.7
 docutils==0.13.1
 future==0.16.0            # via utilkit
+idna==2.5                 # via requests
 jinja2==2.9.6
 markdown==2.6.8
 markupsafe==1.0           # via jinja2
 pygments==2.2.0
 pytz==2017.2              # via utilkit
 pyyaml==3.12
-requests==2.14.1
+requests==2.17.3
+urllib3==1.21.1           # via requests
 utilkit==0.4.0
 
 pkg-resources==0.0.0      # needed for some virtualenvs
