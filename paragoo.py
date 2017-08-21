@@ -262,13 +262,17 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean, ca
 
     # Site-global texts
     site_fields = ['title', 'author', 'description', 'logo', 'mobiletoggle', 'copyright', 'footer', 'about_title',
-                   'about', 'linkblocks', 'googleanalytics', 'piwikurl', 'piwikdomains', 'piwikid']
+                   'about', 'languagecode', 'linkblocks', 'googleanalytics', 'piwikurl', 'piwikdomains', 'piwikid']
     site_data = {}
     for field in site_fields:
         if field in structure:
             site_data[field] = structure[field]
         else:
             print '! site field "' + field + '" not found'
+
+    if 'languagecode' not in site_data:
+        # fall back to english
+        site_data['languagecode'] = 'en'
 
     # Add styling and script related resources to template namespace
     styling = ['css', 'styles', 'scripts']
