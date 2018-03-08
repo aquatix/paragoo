@@ -1,4 +1,5 @@
 import datetime
+import importlib
 import os
 import sys
 
@@ -26,7 +27,7 @@ def render_include(site, environment, key, params):
     @@@key=param1:param2:param3@@@
     """
     # Load the relevant plugin
-    plugin = __import__('plugins.' + key, globals(), locals(), [key], -1)
+    plugin = importlib.import_module('plugins.' + key)
     return plugin.render(site, environment, params)
 
 
@@ -216,8 +217,13 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean, ca
     # Change default encoding to UTF-8
     # We need to reload sys module first, because setdefaultencoding is available
     # only at startup time
-    reload(sys)
-    sys.setdefaultencoding('utf-8')
+    try:
+        # Python 2
+        reload(sys)
+        sys.setdefaultencoding('utf-8')
+    except NameError:
+        # Python 3 already is utf-8 awesome
+        pass
 
     print('> start')
     try:
