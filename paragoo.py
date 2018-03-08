@@ -49,11 +49,11 @@ def paragoo_includes(site, environment, body, token='@@@'):
                 else:
                     include_parts = part.split('=')
                     include_params = include_parts[1].split(':')
-                    #print '  ' + str(include_parts)
+                    #print('  ' + str(include_parts))
                     if include_type_exists(include_parts[0]):
                         result += render_include(site, environment, include_parts[0], include_params)
                     else:
-                        print 'E Plugin not found for include with key "' + include_parts[0] + '"'
+                        print('E Plugin not found for include with key "' + include_parts[0] + '"')
                     is_content = True
             body = result
     return result
@@ -218,7 +218,7 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean, ca
     reload(sys)
     sys.setdefaultencoding('utf-8')
 
-    print '> start'
+    print('> start')
     try:
         f = open(os.path.join(site, 'site.yaml'))
 
@@ -227,7 +227,7 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean, ca
         structure = fileutil.yaml_ordered_load(f, yaml.SafeLoader)
         f.close()
     except IOError as e:
-        print e
+        print(e)
         sys.exit(1)
 
     # Templates can live anywhere, define them on the command line
@@ -244,14 +244,14 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean, ca
     try:
         template = environment.get_template('base.html')
     except jinja2.exceptions.TemplateNotFound as e:
-        print 'E Template not found: ' + str(e) + ' in template dir ' + template_dir
+        print('E Template not found: ' + str(e) + ' in template dir ' + template_dir)
         sys.exit(2)
 
     if clean:
-        print 'd Cleaning up output_dir ' + output_dir
+        print('d Cleaning up output_dir ' + output_dir)
         fileutil.archive_if_exists(output_dir)
     else:
-        print '! Not cleaning up, overwrite existing, keeping others'
+        print('! Not cleaning up, overwrite existing, keeping others')
 
     fileutil.ensure_dir_exists(output_dir)
 
@@ -268,7 +268,7 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean, ca
         if field in structure:
             site_data[field] = structure[field]
         else:
-            print '! site field "' + field + '" not found'
+            print('! site field "' + field + '" not found')
 
     if 'languagecode' not in site_data:
         # fall back to english
@@ -284,7 +284,7 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean, ca
     for resource in styling:
         site_res = os.path.join(os.path.dirname(site), resource)
         if os.path.exists(site_res):
-            print 'I site has ' + resource + ' that template might want to include'
+            print('I site has ' + resource + ' that template might want to include')
             res_files = fileutil.list_files(site_res, extension='css')
             res_files += fileutil.list_files(site_res, extension='js')
             site_data['site_' + resource] = []
@@ -299,7 +299,7 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean, ca
     try:
         source_uses_subdirs = structure['subdirs']
     except KeyError:
-        print 'I Defaulting to searching sub directories for source files'
+        print('I Defaulting to searching sub directories for source files')
 
     if pathprefix != '' and pathprefix[0] == '/':
         # Stip leading / from the prefix
@@ -326,7 +326,7 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean, ca
             source_section_filename = os.path.join(site, 'pages', section)
         first_page = True # Homepage of section
         if not 'pages' in section_data:
-            print 'I section ' + section + ' does not have pages'
+            print('I section ' + section + ' does not have pages')
             page_data = structure['sections'][section]
             htmlbody = load_page_source(source_uses_subdirs, source_section_filename, None, {})
             if htmlbody:
@@ -370,7 +370,7 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean, ca
                     with open(filename, 'w') as pf:
                         pf.write(output)
             else:
-                print 'E hm, also no section page found'
+                print('E hm, also no section page found')
         else:
             for page in section_data['pages']:
                 # Loop over its pages
@@ -433,15 +433,15 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean, ca
     for dirname in static_dirs:
         for src_dir in src_dirs:
             src = os.path.join(src_dir, dirname)
-            #print '- copying directory "' + src + '"'
+            #print('- copying directory "' + src + '"')
             dst = os.path.join(output_dir, dirname)
             if not os.path.exists(src):
-                #print 'E Source directory not found, skipping'
+                #print('E Source directory not found, skipping')
                 pass
             else:
-                print '- copying directory "' + src + '"'
+                print('- copying directory "' + src + '"')
                 fileutil.copytree(src, dst, rename=files_to_rename)
-    print '> done'
+    print('> done')
 
 
 if __name__ == '__main__':
