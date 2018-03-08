@@ -1,12 +1,13 @@
+import datetime
 import os
 import sys
-import jinja2
+
 import click
+import jinja2
 import markdown
 import yaml
 from docutils.core import publish_parts
-import datetime
-from utilkit import fileutil, datetimeutil
+from utilkit import datetimeutil, fileutil
 
 
 def include_type_exists(key):
