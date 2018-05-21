@@ -4,10 +4,10 @@
 #
 #    pip-compile --output-file requirements-dev.txt requirements-dev.in
 #
-astroid==1.6.2            # via pylint
+astroid==1.6.4            # via pylint
 beautifulsoup4==4.6.0     # via bs4
 bs4==0.0.1
-certifi==2018.1.18        # via requests
+certifi==2018.4.16        # via requests
 chardet==3.0.4            # via requests
 click==6.7
 docutils==0.14
@@ -20,8 +20,8 @@ markdown==2.6.11
 markupsafe==1.0
 mccabe==0.6.1             # via pylint
 pygments==2.2.0
-pylint==1.8.3
-pytz==2018.3              # via utilkit
+pylint==1.9.1
+pytz==2018.4              # via utilkit
 pyyaml==3.12
 requests==2.18.4
 six==1.11.0               # via astroid, pylint

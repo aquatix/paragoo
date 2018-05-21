@@ -6,7 +6,7 @@
 #
 beautifulsoup4==4.6.0     # via bs4
 bs4==0.0.1
-certifi==2018.1.18        # via requests
+certifi==2018.4.16        # via requests
 chardet==3.0.4            # via requests
 click==6.7
 docutils==0.14
@@ -16,7 +16,7 @@ jinja2==2.10
 markdown==2.6.11
 markupsafe==1.0
 pygments==2.2.0
-pytz==2018.3              # via utilkit
+pytz==2018.4              # via utilkit
 pyyaml==3.12
 requests==2.18.4
 urllib3==1.22             # via requests
