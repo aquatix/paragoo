@@ -16,7 +16,7 @@ def render(site_path, environment, params):
     Format of params: <key>
     """
     filename = ''
-    print os.path.join(site_path, 'tiles', params[0] + '.md')
+    print(os.path.join(site_path, 'tiles', params[0] + '.md'))
     if os.path.isfile(os.path.join(site_path, 'tiles', params[0] + '.md')):
         filename = os.path.join(site_path, 'tiles', params[0] + '.md')
         data = fileutil.get_file_contents(filename)
