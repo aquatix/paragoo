@@ -1,7 +1,7 @@
 paragoo
 =======
 
-|PyPI version| |PyPI downloads| |PyPI license| |Code health| |Codacy|
+|PyPI version| |PyPI license| |Code health| |Codacy|
 
 `paragoo`_ is a static site generator, written in Python. It takes a
 simple `yaml`_ file with the structure of the site, the source
@@ -89,8 +89,6 @@ See the `Changelog`_.
 .. _yaml: https://en.wikipedia.org/wiki/YAML
 .. _Jinja2: http://jinja.pocoo.org/
 .. |PyPI version| image:: https://img.shields.io/pypi/v/paragoo.svg
-   :target: https://pypi.python.org/pypi/paragoo/
-.. |PyPI downloads| image:: https://img.shields.io/pypi/dm/paragoo.svg
    :target: https://pypi.python.org/pypi/paragoo/
 .. |PyPI license| image:: https://img.shields.io/github/license/aquatix/paragoo.svg
    :target: https://pypi.python.org/pypi/paragoo/
