@@ -1,6 +1,10 @@
 paragoo
 =======
 
+.. image:: https://api.codacy.com/project/badge/Grade/7fff3d151d3c4ab087b22b8e04a008fe
+   :alt: Codacy Badge
+   :target: https://app.codacy.com/app/aquatix/paragoo?utm_source=github.com&utm_medium=referral&utm_content=aquatix/paragoo&utm_campaign=badger
+
 |PyPI version| |PyPI downloads| |PyPI license| |Code health|
 
 `paragoo`_ is a static site generator, written in Python. It takes a
