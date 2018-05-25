@@ -266,6 +266,7 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean, ca
     sitemap_wanted = False
     if 'sitemap' in structure and structure['sitemap'] == True:
         sitemap_wanted = True
+    # TODO: use generate_sitemap and add as page
 
     # Site-global texts
     site_fields = ['title', 'author', 'description', 'logo', 'mobiletoggle', 'copyright', 'footer', 'about_title',
