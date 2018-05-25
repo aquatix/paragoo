@@ -1,11 +1,7 @@
 paragoo
 =======
 
-.. image:: https://api.codacy.com/project/badge/Grade/7fff3d151d3c4ab087b22b8e04a008fe
-   :alt: Codacy Badge
-   :target: https://app.codacy.com/app/aquatix/paragoo?utm_source=github.com&utm_medium=referral&utm_content=aquatix/paragoo&utm_campaign=badger
-
-|PyPI version| |PyPI downloads| |PyPI license| |Code health|
+|PyPI version| |PyPI downloads| |PyPI license| |Code health| |Codacy|
 
 `paragoo`_ is a static site generator, written in Python. It takes a
 simple `yaml`_ file with the structure of the site, the source
@@ -101,5 +97,8 @@ See the `Changelog`_.
 .. |Code health| image:: https://landscape.io/github/aquatix/paragoo/master/landscape.svg?style=flat
    :target: https://landscape.io/github/aquatix/paragoo/master
    :alt: Code Health
+.. |Codacy| image:: https://api.codacy.com/project/badge/Grade/7fff3d151d3c4ab087b22b8e04a008fe
+   :alt: Codacy Badge
+   :target: https://app.codacy.com/app/aquatix/paragoo?utm_source=github.com&utm_medium=referral&utm_content=aquatix/paragoo&utm_campaign=badger
 .. _paragoo material theme: https://github.com/aquatix/paragoo-theme-material
 .. _Changelog: https://github.com/aquatix/paragoo/blob/master/CHANGELOG.md
