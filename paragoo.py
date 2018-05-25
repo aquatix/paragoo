@@ -452,7 +452,5 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean, ca
 
 
 if __name__ == '__main__':
-    """
-    Paragoo is ran standalone
-    """
+    # Paragoo is ran standalone
     cli()
