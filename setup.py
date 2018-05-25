@@ -5,10 +5,10 @@ https://packaging.python.org/en/latest/distributing.html
 https://github.com/pypa/sampleproject
 """
 
-from setuptools import setup
-# To use a consistent encoding
 from codecs import open as codecopen
 from os import path
+
+from setuptools import setup
 
 here = path.abspath(path.dirname(__file__))
 
@@ -35,7 +35,18 @@ setup(
 
     # as a practice no need to hard code version unless you know program wont
     # work unless the specific versions are used
-    install_requires=['Jinja2', 'Markdown', 'MarkupSafe', 'docutils', 'pygments', 'PyYAML', 'click', 'requests', 'bs4','utilkit>=0.3.0'],
+    install_requires=[
+        'Jinja2',
+        'Markdown',
+        'MarkupSafe',
+        'docutils',
+        'pygments',
+        'PyYAML',
+        'click',
+        'requests',
+        'bs4',
+        'utilkit>=0.3.0'
+    ],
 
     py_modules=['paragoo'],
 
