@@ -4,7 +4,7 @@
 #
 #    pip-compile --output-file requirements-dev.txt requirements-dev.in
 #
-astroid==1.6.4            # via pylint
+astroid==2.0              # via pylint
 beautifulsoup4==4.6.0     # via bs4
 bs4==0.0.1
 certifi==2018.4.16        # via requests
@@ -12,7 +12,7 @@ chardet==3.0.4            # via requests
 click==6.7
 docutils==0.14
 future==0.16.0            # via utilkit
-idna==2.6                 # via requests
+idna==2.7                 # via requests
 isort==4.3.4              # via pylint
 jinja2==2.10
 lazy-object-proxy==1.3.1  # via astroid
@@ -20,11 +20,12 @@ markdown==2.6.11
 markupsafe==1.0
 mccabe==0.6.1             # via pylint
 pygments==2.2.0
-pylint==1.9.1
-pytz==2018.4              # via utilkit
-pyyaml==3.12
-requests==2.18.4
-six==1.11.0               # via astroid, pylint
-urllib3==1.22             # via requests
+pylint==2.0.0
+pytz==2018.5              # via utilkit
+pyyaml==3.13
+requests==2.19.1
+six==1.11.0               # via astroid
+typed-ast==1.1.0          # via astroid
+urllib3==1.23             # via requests
 utilkit==0.4.1
 wrapt==1.10.11            # via astroid

@@ -11,13 +11,13 @@ chardet==3.0.4            # via requests
 click==6.7
 docutils==0.14
 future==0.16.0            # via utilkit
-idna==2.6                 # via requests
+idna==2.7                 # via requests
 jinja2==2.10
 markdown==2.6.11
 markupsafe==1.0
 pygments==2.2.0
-pytz==2018.4              # via utilkit
-pyyaml==3.12
-requests==2.18.4
-urllib3==1.22             # via requests
+pytz==2018.5              # via utilkit
+pyyaml==3.13
+requests==2.19.1
+urllib3==1.23             # via requests
 utilkit==0.4.1
