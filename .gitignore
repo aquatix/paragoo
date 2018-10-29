@@ -70,3 +70,7 @@ local_settings.py
 # ctags
 tags
 TAGS
+
+# Don't check in settings files
+settings.py
+site.yaml
