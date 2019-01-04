@@ -241,9 +241,9 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean, ca
     template_dir = template
     #loader = jinja2.FileSystemLoader(template_dir)
     loader = jinja2.FileSystemLoader(
-            [template_dir,
-             os.path.join(os.path.dirname(__file__), 'templates/includes'),
-             os.path.join(os.path.dirname(__file__), 'templates')])
+        [template_dir,
+         os.path.join(os.path.dirname(__file__), 'templates/includes'),
+         os.path.join(os.path.dirname(__file__), 'templates')])
     environment = jinja2.Environment(loader=loader, trim_blocks=True, lstrip_blocks=True)
 
     #environment.filters['paragoo_includes'] = paragoo_includes
@@ -264,7 +264,7 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean, ca
 
     # Is the generation of a sitemap page wanted?
     sitemap_wanted = False
-    if 'sitemap' in structure and structure['sitemap'] == True:
+    if 'sitemap' in structure and structure['sitemap']:
         sitemap_wanted = True
     # TODO: use generate_sitemap and add as page
 
@@ -429,8 +429,8 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean, ca
         try:
             data['htmlbody'] = paragoo_includes(site, environment, structure['errorpage'])
         except KeyError:
-            data['htmlbody'] = 'An error occurred. Use the navigation to find something else on the website or use history back to go back to where ' \
-                               'you came from.'
+            data['htmlbody'] = 'An error occurred. Use the navigation to find something else on the website or use ' \
+                               'history back to go back to where you came from.'
         output = template.render(data)
         filename = os.path.join(output_dir, page + '.html')
         with open(filename, 'w') as pf:
