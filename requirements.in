@@ -8,7 +8,7 @@ docutils
 # Syntax highlighting
 pygments
 # yaml config
-PyYAML
+strictyaml
 # CLI interface
 click
 # Downloading content from the web

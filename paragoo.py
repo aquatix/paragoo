@@ -6,7 +6,7 @@ import sys
 import click
 import jinja2
 import markdown
-import yaml
+import strictyaml
 from docutils.core import publish_parts
 from utilkit import datetimeutil, fileutil
 
@@ -231,7 +231,7 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean, ca
 
         print('r Reading structure from ' + os.path.join(site, 'site.yaml'))
 
-        structure = fileutil.yaml_ordered_load(f, yaml.SafeLoader)
+        structure = strictyaml.load(f.read()).data
         f.close()
     except IOError as e:
         print(e)

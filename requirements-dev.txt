@@ -21,11 +21,13 @@ markupsafe==1.1.0
 mccabe==0.6.1             # via pylint
 pygments==2.3.1
 pylint==2.2.2
+python-dateutil==2.7.5    # via strictyaml
 pytz==2018.7              # via utilkit
-pyyaml==3.13
 requests==2.21.0
-six==1.12.0               # via astroid
+ruamel.yaml==0.15.83      # via strictyaml
+six==1.12.0               # via astroid, python-dateutil
 soupsieve==1.6.2          # via beautifulsoup4
+strictyaml==1.0.0
 urllib3==1.24.1           # via requests
 utilkit==0.4.1
 wrapt==1.10.11            # via astroid
