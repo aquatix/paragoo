@@ -305,7 +305,8 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean, ca
 
     source_uses_subdirs = True
     try:
-        source_uses_subdirs = structure['subdirs']
+        if structure['subdirs'].lower() == 'false':
+            source_uses_subdirs = False
     except KeyError:
         print('I Defaulting to searching sub directories for source files')
 
