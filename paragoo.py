@@ -238,7 +238,7 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean, ca
         sys.exit(1)
 
     # Templates can live anywhere, define them on the command line
-    template_dir = template
+      template_dir = template
     #loader = jinja2.FileSystemLoader(template_dir)
     loader = jinja2.FileSystemLoader(
         [template_dir,
