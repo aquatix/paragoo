@@ -8,28 +8,63 @@ import jinja2
 import markdown
 import strictyaml
 from docutils.core import publish_parts
-from strictyaml import Bool, Map, MapPattern, Optional, Str
+from strictyaml import Bool, Int, Map, MapPattern, Optional, Str
 from utilkit import datetimeutil, fileutil
 
 # strictyaml schema for project settings
-schema = MapPattern(
-    Str(),
-    Map(
-        {
-            "appkey": Str(),
-            "linkblocks": MapPattern(Str(), Map({
+schema = Map({
+    "title": Str(),
+    "author": Str(),
+    "author": Str(),
+    "description": Str(),
+    "logo": Str(),
+    Optional("mobiletoggle", default=True): Bool(),
+    "copyright": Str(),
+    "footer": Str(),
+    "about_title": Str(),
+    "about": Str(),
+    Optional("timeline", default=True): Bool(),
+    Optional("languagecode", default='en'): Str(),
+    Optional("subdirs"): Bool(),
+    "errorpage": Str(),
+    Optional("googleanalytics"): Str(),
+    Optional("piwikurl"): Str(),
+    Optional("piwikdomains"): Str(),
+    Optional("piwikid"): Int(),
+
+    "linkblocks": MapPattern(
+        Str(),
+        Map(
+            {
                 "title": Str(),
-                "links": MapPattern(Str(), Str()),
-                Optional("notify"): Bool(),
-                Optional("repo"): Str(),
-                Optional("repoparent"): Str(),
-                Optional("branch"): Str(),
-                Optional("command"): Str(),
-                Optional("authors"): MapPattern(Str(), Str()),
-            }))
-        }
-    )
-)
+                "links": MapPattern(Str(), Map({
+                    Optional("title"): Str(),
+                    Optional("url"): Str(),
+                }))
+            }
+        )
+    ),
+    "replacements": MapPattern(
+        Str(), Str()
+    ),
+    "sections": MapPattern(
+        Str(),
+        Map(
+            {
+                "title": Str(),
+                Optional("slug"): Str(),
+                Optional("navtitle"): Str(),
+                Optional("show_title"): Str(),
+                Optional("pages"): MapPattern(Str(), Map({
+                    "title": Str(),
+                    Optional("navtitle"): Str(),
+                    Optional("description"): Str(),
+                    Optional("slug"): Str(),
+                }))
+            }
+        )
+    ),
+})
 
 
 def include_type_exists(key):
@@ -219,9 +254,9 @@ def check_config(site):
     """
     Check site config (site.yaml) for correctness
     """
-    click.secho('Needs implementing', fg='red')
     with open(os.path.join(site, 'site.yaml')) as f:
-        structure = strictyaml.load(f.read(), schema).data
+        strictyaml.load(f.read(), schema).data
+    click.secho('Configuration validated against paragoo schema', fg='green')
 
 
 #@cli.command('run_disruptions')
