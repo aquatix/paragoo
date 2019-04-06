@@ -25,13 +25,12 @@ schema = Map({
     "about": Str(),
     Optional("timeline", default=True): Bool(),
     Optional("languagecode", default='en'): Str(),
-    Optional("subdirs"): Bool(),
+    Optional("subdirs", default=True): Bool(),
     "errorpage": Str(),
     Optional("googleanalytics"): Str(),
     Optional("piwikurl"): Str(),
     Optional("piwikdomains"): Str(),
     Optional("piwikid"): Int(),
-
     "linkblocks": MapPattern(
         Str(),
         Map(
@@ -350,11 +349,6 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean, ca
         else:
             print('! site field "' + field + '" not found')
 
-    if 'languagecode' not in site_data:
-        # fall back to english
-        site_data['languagecode'] = 'en'
-        structure['languagecode'] = 'en'
-
     # Add styling and script related resources to template namespace
     styling = ['css', 'styles', 'scripts']
 
@@ -376,12 +370,7 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean, ca
                 else:
                     site_data['site_' + resource].append('/' + resource + '/' + res)
 
-    source_uses_subdirs = True
-    try:
-        if structure['subdirs'].lower() == 'false':
-            source_uses_subdirs = False
-    except KeyError:
-        print('I Defaulting to searching sub directories for source files')
+    source_uses_subdirs = structure['subdirs']
 
     if pathprefix != '' and pathprefix[0] == '/':
         # Stip leading / from the prefix
