@@ -29,7 +29,7 @@ def render(site_path, environment, params):
         items = []
         counter = 1
         for item in content:
-            if item.strip() and counter >= first and counter <= last:
+            if item.strip() and first <= counter <= last:
                 parts = item.split('=')
                 key = parts[0]
                 if key[0] == '#':
@@ -45,5 +45,4 @@ def render(site_path, environment, params):
                 counter += 1
         data = {'items': items}
         return template.render(data)
-    else:
-        raise NewsNotFoundException(params[0])
+    raise NewsNotFoundException(params[0])
