@@ -15,7 +15,6 @@ from utilkit import datetimeutil, fileutil
 schema = Map({
     "title": Str(),
     "author": Str(),
-    "author": Str(),
     "description": Str(),
     "logo": Str(),
     Optional("mobiletoggle", default=True): Bool(),
@@ -254,8 +253,8 @@ def check_config(site):
     Check site config (site.yaml) for correctness
     """
     with open(os.path.join(site, 'site.yaml')) as f:
-        strictyaml.load(f.read(), schema).data
-    click.secho('Configuration validated against paragoo schema', fg='green')
+        teststructure = strictyaml.load(f.read(), schema).data
+    click.secho('Configuration of {} validated against paragoo schema'.format(teststructure['title']), fg='green')
 
 
 #@cli.command('run_disruptions')
