@@ -281,6 +281,7 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean, ca
     if 'languagecode' not in site_data:
         # fall back to english
         site_data['languagecode'] = 'en'
+        structure['languagecode'] = 'en'
 
     # Add styling and script related resources to template namespace
     styling = ['css', 'styles', 'scripts']

@@ -27,9 +27,9 @@ def get_first_and_last(content, params):
         last = int(params[2])
     return first, last
 
-def parse_date(datestring):
+def parse_date(datestring, languagecode):
     """Parses a string of format yyyy-mm-dd into yyyy, mm-dd"""
-    months = {
+    months = {'en': {
         '01': 'Jan',
         '02': 'Feb',
         '03': 'Mar',
@@ -42,9 +42,24 @@ def parse_date(datestring):
         '10': 'Oct',
         '11': 'Nov',
         '12': 'Dec',
-    }
+    }, 'nl': {
+        '01': 'Jan',
+        '02': 'Feb',
+        '03': 'Mar',
+        '04': 'Apr',
+        '05': 'Mei',
+        '06': 'Jun',
+        '07': 'Jul',
+        '08': 'Aug',
+        '09': 'Sep',
+        '10': 'Okt',
+        '11': 'Nov',
+        '12': 'Dec',
+    }}
     year, month, date = datestring.split('-')
-    month = months.get(month, month)
+    if languagecode not in months:
+        languagecode = 'en'
+    month = months[languagecode].get(month, month)
     return year, month, date
 
 def flat_list(content, params):
@@ -68,7 +83,7 @@ def flat_list(content, params):
             counter += 1
     return items
 
-def items_per_year(content, params):
+def items_per_year(structure, content, params):
     first, last = get_first_and_last(content, params)
     current_year = None
     items = {}
@@ -80,7 +95,7 @@ def items_per_year(content, params):
             if key[0] == '#':
                 # Skip this entry
                 continue
-            year, month, date = parse_date(key)
+            year, month, date = parse_date(key, structure['languagecode'])
             del parts[0]
             if year != current_year:
                 current_year = year
@@ -111,6 +126,6 @@ def render(site_path, structure, environment, params):
         template = environment.get_template('news.html')
         data = {'items': items, 'environment': environment}
     else:
-        items = items_per_year(content, params)
+        items = items_per_year(structure, content, params)
     data = {'items': items, 'environment': environment}
     return template.render(data)
