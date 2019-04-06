@@ -29,7 +29,22 @@ def get_first_and_last(content, params):
 
 def parse_date(datestring):
     """Parses a string of format yyyy-mm-dd into yyyy, mm-dd"""
+    months = {
+        '01': 'Jan',
+        '02': 'Feb',
+        '03': 'Mar',
+        '04': 'Apr',
+        '05': 'May',
+        '06': 'Jun',
+        '07': 'Jul',
+        '08': 'Aug',
+        '09': 'Sep',
+        '10': 'Oct',
+        '11': 'Nov',
+        '12': 'Dec',
+    }
     year, month, date = datestring.split('-')
+    month = months.get(month, month)
     return year, month, date
 
 def flat_list(content, params):
