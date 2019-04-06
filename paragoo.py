@@ -8,7 +8,61 @@ import jinja2
 import markdown
 import strictyaml
 from docutils.core import publish_parts
+from strictyaml import Bool, Int, Map, MapPattern, Optional, Str
 from utilkit import datetimeutil, fileutil
+
+# strictyaml schema for project settings
+schema = Map({
+    "title": Str(),
+    "author": Str(),
+    "description": Str(),
+    "logo": Str(),
+    Optional("mobiletoggle", default=True): Bool(),
+    "copyright": Str(),
+    "footer": Str(),
+    "about_title": Str(),
+    "about": Str(),
+    Optional("timeline", default=True): Bool(),
+    Optional("languagecode", default='en'): Str(),
+    Optional("subdirs", default=True): Bool(),
+    "errorpage": Str(),
+    Optional("googleanalytics"): Str(),
+    Optional("piwikurl"): Str(),
+    Optional("piwikdomains"): Str(),
+    Optional("piwikid"): Int(),
+    "linkblocks": MapPattern(
+        Str(),
+        Map(
+            {
+                "title": Str(),
+                "links": MapPattern(Str(), Map({
+                    Optional("title"): Str(),
+                    Optional("url"): Str(),
+                }))
+            }
+        )
+    ),
+    "replacements": MapPattern(
+        Str(), Str()
+    ),
+    "sections": MapPattern(
+        Str(),
+        Map(
+            {
+                "title": Str(),
+                Optional("slug"): Str(),
+                Optional("navtitle"): Str(),
+                Optional("show_title"): Str(),
+                Optional("pages"): MapPattern(Str(), Map({
+                    "title": Str(),
+                    Optional("navtitle"): Str(),
+                    Optional("description"): Str(),
+                    Optional("slug"): Str(),
+                }))
+            }
+        )
+    ),
+})
 
 
 def include_type_exists(key):
@@ -198,7 +252,9 @@ def check_config(site):
     """
     Check site config (site.yaml) for correctness
     """
-    click.secho('Needs implementing', fg='red')
+    with open(os.path.join(site, 'site.yaml')) as f:
+        teststructure = strictyaml.load(f.read(), schema).data
+    click.secho('Configuration of {} validated against paragoo schema'.format(teststructure['title']), fg='green')
 
 
 #@cli.command('run_disruptions')
@@ -211,8 +267,22 @@ def check_config(site):
 @click.option('--clean/--noclean', help='Clean the output_dir first or not', default=False)
 @click.option('--cachebuster/--nocachebuster', help='Add cache-busting timestamp to stylesheet assets', default=False)
 def generate_site(site, template, output_dir, pathprefix, makerooturi, clean, cachebuster):
-    """
-    Generate the website specified in the config
+    """Generates the website specified in the config
+
+    :param site:
+    :type site: str
+    :param template:
+    :type template: str
+    :param output_dir:
+    :type output_dir: str
+    :param pathprefix:
+    :type pathprefix: str
+    :param makerooturi:
+    :type makerooturi: bool
+    :param clean:
+    :type clean: bool
+    :param cachebuster:
+    :type cachebuster: bool
     """
     # Change default encoding to UTF-8
     # We need to reload sys module first, because setdefaultencoding is available
@@ -231,7 +301,7 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean, ca
 
         print('r Reading structure from ' + os.path.join(site, 'site.yaml'))
 
-        structure = strictyaml.load(f.read()).data
+        structure = strictyaml.load(f.read(), schema).data
         f.close()
     except IOError as e:
         print(e)
@@ -278,11 +348,6 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean, ca
         else:
             print('! site field "' + field + '" not found')
 
-    if 'languagecode' not in site_data:
-        # fall back to english
-        site_data['languagecode'] = 'en'
-        structure['languagecode'] = 'en'
-
     # Add styling and script related resources to template namespace
     styling = ['css', 'styles', 'scripts']
 
@@ -304,12 +369,7 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean, ca
                 else:
                     site_data['site_' + resource].append('/' + resource + '/' + res)
 
-    source_uses_subdirs = True
-    try:
-        if structure['subdirs'].lower() == 'false':
-            source_uses_subdirs = False
-    except KeyError:
-        print('I Defaulting to searching sub directories for source files')
+    source_uses_subdirs = structure['subdirs']
 
     if pathprefix != '' and pathprefix[0] == '/':
         # Stip leading / from the prefix
