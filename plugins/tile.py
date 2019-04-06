@@ -10,7 +10,7 @@ class TileNotFoundException(Exception):
     pass
 
 
-def render(site_path, environment, params):
+def render(site_path, structure, environment, params):
     """
     Look up the tile file from site import import config in site_path
     Format of params: <key>

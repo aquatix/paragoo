@@ -20,7 +20,7 @@ def include_type_exists(key):
     return os.path.isfile(os.path.join(script_dir, 'plugins', key + '.py'))
 
 
-def render_include(site, environment, key, params):
+def render_include(site, structure, environment, key, params):
     """
     Render paragoo include. Typically looks like:
     @@@key=param@@@
@@ -28,10 +28,10 @@ def render_include(site, environment, key, params):
     """
     # Load the relevant plugin
     plugin = importlib.import_module('plugins.' + key)
-    return plugin.render(site, environment, params)
+    return plugin.render(site, structure, environment, params)
 
 
-def paragoo_includes(site, environment, body, token='@@@'):
+def paragoo_includes(site, structure, environment, body, token='@@@'):
     """
     Filter that looks for blocks surrounded by `token` and include that content type in
     the rendered html
@@ -53,7 +53,7 @@ def paragoo_includes(site, environment, body, token='@@@'):
                     include_params = include_parts[1].split(':')
                     #print('  ' + str(include_parts))
                     if include_type_exists(include_parts[0]):
-                        result += render_include(site, environment, include_parts[0], include_params)
+                        result += render_include(site, structure, environment, include_parts[0], include_params)
                     else:
                         print('E Plugin not found for include with key "' + include_parts[0] + '"')
                     is_content = True
@@ -354,7 +354,7 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean, ca
                 else:
                     # Default to showing the page's title
                     data['show_title'] = True
-                data['htmlbody'] = paragoo_includes(site, environment, htmlbody)
+                data['htmlbody'] = paragoo_includes(site, structure, environment, htmlbody)
                 data['navbar'] = navbar
                 data['active_section'] = section
                 data['active_page'] = section
@@ -398,7 +398,7 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean, ca
                     # Default to showing the page's title
                     data['show_title'] = True
                 data['page'] = page_data
-                data['htmlbody'] = paragoo_includes(site, environment, htmlbody)
+                data['htmlbody'] = paragoo_includes(site, structure, environment, htmlbody)
                 data['navbar'] = navbar
                 data['active_section'] = section
                 data['active_page'] = page
@@ -428,7 +428,7 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean, ca
     for page in error_pages:
         data['page'] = {'title': page + ' ' + error_pages[page]}
         try:
-            data['htmlbody'] = paragoo_includes(site, environment, structure['errorpage'])
+            data['htmlbody'] = paragoo_includes(site, structure, environment, structure['errorpage'])
         except KeyError:
             data['htmlbody'] = 'An error occurred. Use the navigation to find something else on the website or use ' \
                                'history back to go back to where you came from.'
