@@ -13,15 +13,15 @@ docutils==0.14
 future==0.17.1            # via utilkit
 idna==2.8                 # via requests
 jinja2==2.10
-markdown==3.0.1
+markdown==3.1
 markupsafe==1.1.1
 pygments==2.3.1
 python-dateutil==2.8.0    # via strictyaml
 pytz==2018.9              # via utilkit
 requests==2.21.0
-ruamel.yaml==0.15.89      # via strictyaml
+ruamel.yaml==0.15.91      # via strictyaml
 six==1.12.0               # via python-dateutil
-soupsieve==1.8            # via beautifulsoup4
+soupsieve==1.9            # via beautifulsoup4
 strictyaml==1.0.0
 urllib3==1.24.1           # via requests
 utilkit==0.4.1
