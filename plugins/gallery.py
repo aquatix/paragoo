@@ -8,7 +8,7 @@ class GalleryNotFoundException(Exception):
     pass
 
 
-def render(site_path, environment, params):
+def render(site_path, structure, environment, params):
     """
     Look up the gallery config file from site import config in site_path
     Format of params: <key>:<offset>:<length>

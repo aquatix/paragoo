@@ -32,7 +32,7 @@ def get_app_details(app_key):
         return {'title': soup.title.text.replace(' - Android-apps op Google Play', ''), 'url': url_full, 'description': description, 'app_id': app_key}
 
 
-def render(site_path, environment, params):
+def render(site_path, structure, environment, params):
     """
     Look up the Android app details from its Play Store listing
     Format of params: <app_key>:optional description
