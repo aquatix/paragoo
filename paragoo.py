@@ -8,7 +8,28 @@ import jinja2
 import markdown
 import strictyaml
 from docutils.core import publish_parts
+from strictyaml import Bool, Map, MapPattern, Optional, Str
 from utilkit import datetimeutil, fileutil
+
+# strictyaml schema for project settings
+schema = MapPattern(
+    Str(),
+    Map(
+        {
+            "appkey": Str(),
+            "linkblocks": MapPattern(Str(), Map({
+                "title": Str(),
+                "links": MapPattern(Str(), Str()),
+                Optional("notify"): Bool(),
+                Optional("repo"): Str(),
+                Optional("repoparent"): Str(),
+                Optional("branch"): Str(),
+                Optional("command"): Str(),
+                Optional("authors"): MapPattern(Str(), Str()),
+            }))
+        }
+    )
+)
 
 
 def include_type_exists(key):
@@ -199,6 +220,8 @@ def check_config(site):
     Check site config (site.yaml) for correctness
     """
     click.secho('Needs implementing', fg='red')
+    with open(os.path.join(site, 'site.yaml')) as f:
+        structure = strictyaml.load(f.read(), schema).data
 
 
 #@cli.command('run_disruptions')
@@ -211,8 +234,22 @@ def check_config(site):
 @click.option('--clean/--noclean', help='Clean the output_dir first or not', default=False)
 @click.option('--cachebuster/--nocachebuster', help='Add cache-busting timestamp to stylesheet assets', default=False)
 def generate_site(site, template, output_dir, pathprefix, makerooturi, clean, cachebuster):
-    """
-    Generate the website specified in the config
+    """Generates the website specified in the config
+
+    :param site:
+    :type site: str
+    :param template:
+    :type template: str
+    :param output_dir:
+    :type output_dir: str
+    :param pathprefix:
+    :type pathprefix: str
+    :param makerooturi:
+    :type makerooturi: bool
+    :param clean:
+    :type clean: bool
+    :param cachebuster:
+    :type cachebuster: bool
     """
     # Change default encoding to UTF-8
     # We need to reload sys module first, because setdefaultencoding is available
@@ -231,7 +268,7 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean, ca
 
         print('r Reading structure from ' + os.path.join(site, 'site.yaml'))
 
-        structure = strictyaml.load(f.read()).data
+        structure = strictyaml.load(f.read(), schema).data
         f.close()
     except IOError as e:
         print(e)
