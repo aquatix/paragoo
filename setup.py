@@ -41,7 +41,7 @@ setup(
         'MarkupSafe',
         'docutils',
         'pygments',
-        'PyYAML',
+        'strictyaml',
         'click',
         'requests',
         'bs4',
