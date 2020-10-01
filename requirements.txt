@@ -24,7 +24,7 @@ ruamel.yaml==0.16.10      # via strictyaml
 six==1.14.0               # via python-dateutil
 soupsieve==1.9.5          # via beautifulsoup4
 strictyaml==1.0.6
-urllib3==1.25.8           # via requests
+urllib3==1.25.9           # via requests
 utilkit==0.4.1
 
 # The following packages are considered to be unsafe in a requirements file:
