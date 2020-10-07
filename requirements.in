@@ -13,6 +13,6 @@ strictyaml
 click
 # Downloading content from the web
 requests
-bs4
+beautifulsoup4
 # Toolkit for interacting with files, formatting and more
 utilkit>=0.3
