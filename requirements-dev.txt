@@ -12,13 +12,13 @@ click==7.1.2              # via -r requirements.in
 docutils==0.16            # via -r requirements.in
 future==0.18.2            # via utilkit
 idna==2.10                # via requests
-isort==5.5.4              # via pylint
+isort==5.6.4              # via pylint
 jinja2==2.11.2            # via -r requirements.in
 lazy-object-proxy==1.4.3  # via astroid
-markdown==3.3             # via -r requirements.in
+markdown==3.3.3           # via -r requirements.in
 markupsafe==1.1.1         # via -r requirements.in, jinja2
 mccabe==0.6.1             # via pylint
-pygments==2.7.1           # via -r requirements.in
+pygments==2.7.2           # via -r requirements.in
 pylint==2.6.0             # via -r requirements-dev.in
 python-dateutil==2.8.1    # via strictyaml
 pytz==2020.1              # via utilkit
@@ -29,6 +29,6 @@ six==1.15.0               # via astroid, python-dateutil
 soupsieve==2.0.1          # via beautifulsoup4
 strictyaml==1.1.0         # via -r requirements.in
 toml==0.10.1              # via pylint
-urllib3==1.25.10          # via requests
+urllib3==1.25.11          # via requests
 utilkit==0.4.1            # via -r requirements.in
 wrapt==1.12.1             # via astroid
