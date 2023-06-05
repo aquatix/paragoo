@@ -12,24 +12,27 @@ class AppNotFoundException(Exception):
 def get_app_details(app_key):
     url_full = 'https://play.google.com/store/apps/details?id=' + app_key
     url = 'https://play.google.com/store/apps/details'
-    url_params = {'id': app_key }
-    result = requests.get(url, params=url_params)
-    if result.status_code != requests.codes.ok:
+    url_params = {'id': app_key}
+    result = requests.get(url, params=url_params, timeout=10)
+    if not result.ok:
         raise AppNotFoundException(app_key)
-    else:
-        soup = BeautifulSoup(result.text, 'html.parser')
-        #desc_blocks = soup.find('div', {'id': 'id-app-orig-desc'})
-        desc_blocks = soup.findAll('div', attrs={'class':'show-more-content'})
-        description = ''
-        if len(desc_blocks) > 0:
-            description = desc_blocks[0]
-            try:
-                # Get the first (language) block, likely english
-                children = desc_blocks[0].findChildren()
-                description = children[0]
-            except KeyError:
-                pass
-        return {'title': soup.title.text.replace(' - Android-apps op Google Play', ''), 'url': url_full, 'description': description, 'app_id': app_key}
+    soup = BeautifulSoup(result.text, 'html.parser')
+    # desc_blocks = soup.find('div', {'id': 'id-app-orig-desc'})
+    desc_blocks = soup.findAll('div', attrs={'class': 'show-more-content'})
+    description = ''
+    if len(desc_blocks) > 0:
+        description = desc_blocks[0]
+        try:
+            # Get the first (language) block, likely english
+            children = desc_blocks[0].findChildren()
+            description = children[0]
+        except KeyError:
+            pass
+    return {
+        'title': soup.title.text.replace(' - Android-apps op Google Play', ''),
+        'url': url_full, 'description': description,
+        'app_id': app_key
+    }
 
 
 def render(site_path, structure, environment, params):

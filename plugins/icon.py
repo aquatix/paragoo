@@ -14,10 +14,8 @@ def render(site_path, structure, environment, params):
     Format of params: <key>:<offset>:<length>
     """
     filename = os.path.join(site_path, '..', 'images', 'icons', params[0] + '.png')
-    #print '  ' + filename
     if os.path.isfile(filename):
         image_path = '/images/icons/' + params[0] + '.png'
         # @TODO: render with site's icon.html template
         return image_path
-    else:
-        raise IconNotFoundException(params[0])
+    raise IconNotFoundException(params[0])

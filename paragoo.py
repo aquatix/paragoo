@@ -92,7 +92,7 @@ def paragoo_includes(site, structure, environment, body, token='@@@'):
     """
     if body:
         while True:
-            result = u''
+            result = ''
             body_parts = body.split(token)
             if len(body_parts) == 1:
                 # We're done recursing
@@ -105,7 +105,6 @@ def paragoo_includes(site, structure, environment, body, token='@@@'):
                 else:
                     include_parts = part.split('=')
                     include_params = include_parts[1].split(':')
-                    #print('  ' + str(include_parts))
                     if include_type_exists(include_parts[0]):
                         result += render_include(site, structure, environment, include_parts[0], include_params)
                     else:
@@ -178,7 +177,7 @@ def generate_sitemap(structure, pathprefix, list_hidden=False):
             sitemap.append((section_url, section, section_title, section_hassub, sitemap_section))
 
     # Generate page from the sitemap
-    #data = markdown.markdown(data, output_format='html5', extensions=['markdown.extensions.toc'])
+    # data = markdown.markdown(data, output_format='html5', extensions=['markdown.extensions.toc'])
     return sitemap
 
 
@@ -231,13 +230,12 @@ def template_replace(content, replacements):
     href="/page/section1/page1/"
     when 'page' is pathprefix
     """
-    #for key, value in replacements:
     for needle in replacements:
         content = content.replace(needle, replacements[needle])
     return content
 
 
-## Main program
+# Main program
 @click.group()
 def cli():
     """
@@ -252,12 +250,11 @@ def check_config(site):
     """
     Check site config (site.yaml) for correctness
     """
-    with open(os.path.join(site, 'site.yaml')) as f:
+    with open(os.path.join(site, 'site.yaml'), encoding='utf-8') as f:
         teststructure = strictyaml.load(f.read(), schema).data
-    click.secho('Configuration of {} validated against paragoo schema'.format(teststructure['title']), fg='green')
+    click.secho(f'Configuration of {teststructure["title"]} validated against paragoo schema', fg='green')
 
 
-#@cli.command('run_disruptions')
 @cli.command()
 @click.option('-s', '--site', help='Site path', prompt='Site path')
 @click.option('-t', '--template', help='Template path', prompt='Template path')
@@ -269,35 +266,17 @@ def check_config(site):
 def generate_site(site, template, output_dir, pathprefix, makerooturi, clean, cachebuster):
     """Generates the website specified in the config
 
-    :param site:
-    :type site: str
-    :param template:
-    :type template: str
-    :param output_dir:
-    :type output_dir: str
-    :param pathprefix:
-    :type pathprefix: str
-    :param makerooturi:
-    :type makerooturi: bool
-    :param clean:
-    :type clean: bool
-    :param cachebuster:
-    :type cachebuster: bool
+    :param str site:
+    :param str template:
+    :param str output_dir:
+    :param str pathprefix:
+    :param bool makerooturi:
+    :param bool clean:
+    :param bool cachebuster:
     """
-    # Change default encoding to UTF-8
-    # We need to reload sys module first, because setdefaultencoding is available
-    # only at startup time
-    try:
-        # Python 2
-        reload(sys)
-        sys.setdefaultencoding('utf-8')
-    except NameError:
-        # Python 3 already is utf-8 awesome
-        pass
-
     print('> start')
     try:
-        f = open(os.path.join(site, 'site.yaml'))
+        f = open(os.path.join(site, 'site.yaml'), encoding='utf-8')
 
         print('r Reading structure from ' + os.path.join(site, 'site.yaml'))
 
@@ -309,14 +288,13 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean, ca
 
     # Templates can live anywhere, define them on the command line
     template_dir = template
-    #loader = jinja2.FileSystemLoader(template_dir)
     loader = jinja2.FileSystemLoader(
         [template_dir,
          os.path.join(os.path.dirname(__file__), 'templates/includes'),
          os.path.join(os.path.dirname(__file__), 'templates')])
     environment = jinja2.Environment(loader=loader, trim_blocks=True, lstrip_blocks=True)
 
-    #environment.filters['paragoo_includes'] = paragoo_includes
+    # environment.filters['paragoo_includes'] = paragoo_includes
 
     try:
         template = environment.get_template('base.html')
@@ -364,7 +342,9 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean, ca
             site_data['site_' + resource] = []
             for res in res_files:
                 if cachebuster:
-                    site_data['site_' + resource].append('/' + resource + '/' + fileutil.filename_addstring(res, '_' + CACHEBUSTER))
+                    site_data['site_' + resource].append(
+                        '/' + resource + '/' + fileutil.filename_addstring(res, '_' + CACHEBUSTER)
+                    )
                     files_to_rename[res] = fileutil.filename_addstring(res, '_' + CACHEBUSTER)
                 else:
                     site_data['site_' + resource].append('/' + resource + '/' + res)
@@ -386,7 +366,7 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean, ca
     # Create navbar datastructure
     navbar = generate_navbar(structure, pathprefix)
 
-    very_first_page = True # Homepage of website, root
+    very_first_page = True  # Homepage of website, root
     for section in structure['sections']:
         # Iterate over the sections
         section_data = structure['sections'][section]
@@ -394,8 +374,8 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean, ca
         source_section_filename = os.path.join(site, section)
         if not source_uses_subdirs:
             source_section_filename = os.path.join(site, 'pages', section)
-        first_page = True # Homepage of section
-        if not 'pages' in section_data:
+        first_page = True  # Homepage of section
+        if 'pages' not in section_data:
             print('I section ' + section + ' does not have pages')
             page_data = structure['sections'][section]
             htmlbody = load_page_source(source_uses_subdirs, source_section_filename, None, {})
@@ -425,19 +405,19 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean, ca
                 output = template_replace(output, template_replacements)
                 filename = os.path.join(section_filename, 'index.html')
                 fileutil.ensure_dir_exists(filename)
-                with open(filename, 'w') as pf:
+                with open(filename, 'w', encoding='utf-8') as pf:
                     pf.write(output)
                 if first_page:
                     # Also save an index file for the section (first page in section is section homepage)
                     first_page = False
                     filename = os.path.join(section_filename, 'index.html')
-                    with open(filename, 'w') as pf:
+                    with open(filename, 'w', encoding='utf-8') as pf:
                         pf.write(output)
                 if very_first_page:
                     # Also save an index file for the homepage, root of site
                     very_first_page = False
                     filename = os.path.join(output_dir, 'index.html')
-                    with open(filename, 'w') as pf:
+                    with open(filename, 'w', encoding='utf-8') as pf:
                         pf.write(output)
             else:
                 print('E hm, also no section page found')
@@ -470,19 +450,19 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean, ca
                 # Save to output_dir
                 filename = os.path.join(section_filename, page, 'index.html')
                 fileutil.ensure_dir_exists(filename)
-                with open(filename, 'w') as pf:
+                with open(filename, 'w', encoding='utf-8') as pf:
                     pf.write(output)
                 if first_page:
                     # Also save an index file for the section (first page in section is section homepage)
                     first_page = False
                     filename = os.path.join(section_filename, 'index.html')
-                    with open(filename, 'w') as pf:
+                    with open(filename, 'w', encoding='utf-8') as pf:
                         pf.write(output)
                 if very_first_page:
                     # Also save an index file for the homepage, root of site
                     very_first_page = False
                     filename = os.path.join(output_dir, 'index.html')
-                    with open(filename, 'w') as pf:
+                    with open(filename, 'w', encoding='utf-8') as pf:
                         pf.write(output)
     # Generate static pages to be used with the httpd's error directives
     error_pages = {'404': 'Not found', '403': 'Forbidden'}
@@ -495,7 +475,7 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean, ca
                                'history back to go back to where you came from.'
         output = template.render(data)
         filename = os.path.join(output_dir, page + '.html')
-        with open(filename, 'w') as pf:
+        with open(filename, 'w', encoding='utf-8') as pf:
             pf.write(output)
     # Copy the directories with static assets
     static_dirs = ['images', 'styles', 'scripts', 'css', 'font', 'js', 'static']
@@ -503,10 +483,10 @@ def generate_site(site, template, output_dir, pathprefix, makerooturi, clean, ca
     for dirname in static_dirs:
         for src_dir in src_dirs:
             src = os.path.join(src_dir, dirname)
-            #print('- copying directory "' + src + '"')
+            # print('- copying directory "' + src + '"')
             dst = os.path.join(output_dir, dirname)
             if not os.path.exists(src):
-                #print('E Source directory not found, skipping')
+                # print('E Source directory not found, skipping')
                 pass
             else:
                 print('- copying directory "' + src + '"')

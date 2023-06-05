@@ -12,10 +12,11 @@ def open_file(site_path, params):
     filename = os.path.join(site_path, 'news', params[0] + '.desc')
     if os.path.isfile(filename):
         content = ''
-        with open(filename, 'r') as f:
+        with open(filename, 'r', encoding='utf-8') as f:
             content = f.readlines()
             return content
     raise NewsNotFoundException(params[0])
+
 
 def get_first_and_last(content, params):
     first = 1
@@ -26,6 +27,7 @@ def get_first_and_last(content, params):
         first = int(params[1])
         last = int(params[2])
     return first, last
+
 
 def parse_date(datestring, languagecode):
     """Parses a string of format yyyy-mm-dd into yyyy, mm-dd"""
@@ -62,6 +64,7 @@ def parse_date(datestring, languagecode):
     month = months[languagecode].get(month, month)
     return year, month, date
 
+
 def flat_list(content, params):
     first, last = get_first_and_last(content, params)
     items = []
@@ -82,6 +85,7 @@ def flat_list(content, params):
             # Only count non-empty lines
             counter += 1
     return items
+
 
 def items_per_year(structure, content, params):
     first, last = get_first_and_last(content, params)
@@ -108,6 +112,7 @@ def items_per_year(structure, content, params):
             # Only count non-empty lines
             counter += 1
     return items
+
 
 def render(site_path, structure, environment, params):
     """Look up the news file from site import config in site_path
