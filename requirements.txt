@@ -16,7 +16,7 @@ docutils==0.20.1
     # via -r requirements.in
 future==0.18.3
     # via utilkit
-idna==3.4
+idna==3.7
     # via requests
 jinja2==3.1.2
     # via -r requirements.in
