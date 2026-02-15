@@ -1,3 +1,10 @@
+⚠️  `Moved to Codeberg <https://codeberg.org/diginaut/paragoo>`_ | `Read here why <https://dammit.nl/jumping-the-github-ship.html>`_ ⚠️
+
+Be sure to check it out over there, as the rewrite with lots of fixes and updates will not be published here.
+
+**This repository is not mirrored.**
+
+
 paragoo
 =======
 
